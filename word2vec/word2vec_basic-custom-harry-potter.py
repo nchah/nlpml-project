@@ -28,17 +28,27 @@ import numpy as np
 from six.moves import urllib
 from six.moves import xrange  # pylint: disable=redefined-builtin
 import tensorflow as tf
+import nltk
+import string
+
+stopwords = nltk.corpus.stopwords.words('english')
+punctuation = set(string.punctuation)
 
 # Step 1: Download/load the data.
-with codecs.open('wiki.txt', encoding='utf8') as f:
+with codecs.open('harry-potter-all.txt', encoding='utf8') as f:
     data = f.read()
-# data = open('nyt.txt', 'r').read()
+
+punctuation.remove("'")
+for p in punctuation:
+    data = data.replace(p, ' ')
+    print('replaced: ' + p)
+
 words = tf.compat.as_str(data).split()
 
 print('Data size', len(words))
 
 # Step 2: Build the dictionary and replace rare words with UNK token.
-vocabulary_size = 50000  # 50000
+vocabulary_size = 10000  # 50000
 
 
 def build_dataset(words):
@@ -204,7 +214,10 @@ def plot_with_labels(low_dim_embs, labels, filename='tsne.png'):
     assert low_dim_embs.shape[0] >= len(labels), "More labels than embeddings"
     plt.figure(figsize=(18, 18))  # in inches
     for i, label in enumerate(labels):
-        if label.lower() not in stopwords:
+        pos = nltk.pos_tag([label])
+        ignore_tags = ['DT', 'PRP', 'VB', 'RB', 'IN', 'JJ']
+        #if label.lower() not in stopwords and pos[0][1] not in ignore_tags and pos[0][1] == 'NN':
+        if label.lower() not in stopwords and label[0].isupper() and "'" not in label:
             x, y = low_dim_embs[i, :]
             plt.scatter(x, y)
             plt.annotate(label,
@@ -221,11 +234,12 @@ try:
     from sklearn.manifold import TSNE
     import matplotlib.pyplot as plt
     import nltk
+    from nltk import pos_tag
 
     stopwords = nltk.corpus.stopwords.words('english')
 
     tsne = TSNE(perplexity=30, n_components=2, init='pca', n_iter=5000)
-    plot_only = 200  # 500
+    plot_only = 1500  # 500
     low_dim_embs = tsne.fit_transform(final_embeddings[:plot_only, :])
 
     labels = [reverse_dictionary[i] for i in xrange(plot_only)]

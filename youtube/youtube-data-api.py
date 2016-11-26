@@ -149,21 +149,24 @@ def main(input_data):
     """
     global comment_count
 
-    inputs = open(input_data).readlines()
+    inputs = open(input_data).readlines()  # each row = video_title, video_link/_id
 
     for video in inputs:
-        video_id_temp = video.split(",")[1].strip()
-        video_title_temp = video.split(",")[0].strip()
-        comments_list = send_request(resource='commentThreads',
-                                     query_volume='all',
-                                     video_id=video_id_temp,
-                                     video_title=video_title_temp,
-                                     part='snippet,replies',
-                                     max_results=100,
-                                     order_by='relevance')  # 'time' or 'relevance'
-        print(video_title_temp + ": " + str(len(comments_list)) + ", " + str(comment_count) + " comments.")
-        time.sleep(10)
-        comment_count = 0
+        if video.strip():  # if non-blank row; not enough to do "if var:"
+            temp_video_link = video.split(",")[1].strip().split('https://www.youtube.com/watch?v=')
+            # above 'https://' split() will return full string if can't split, so get the last item in split list
+            temp_video_id = temp_video_link[len(temp_video_link)-1]
+            temp_video_title = video.split(",")[0].strip()
+            comments_list = send_request(resource='commentThreads',
+                                         query_volume='all',
+                                         video_id=temp_video_id,
+                                         video_title=temp_video_title,
+                                         part='snippet,replies',
+                                         max_results=100,
+                                         order_by='relevance')  # 'time' or 'relevance'
+            print(temp_video_title + ": " + str(len(comments_list)) + ", " + str(comment_count) + " comments.")
+            time.sleep(10)
+            comment_count = 0
 
     print("Done main().")
     return ''

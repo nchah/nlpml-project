@@ -138,7 +138,7 @@ def send_request(resource, query_volume, video_id, video_title, part, max_result
                 comments_list += response_json['items']
                 print(len(comments_list))  # Debug
                 store_csv(video_id, video_title, comments_list)
-                time.sleep(10)
+                time.sleep(1)
                 comments_list = []
             return comments_list
 

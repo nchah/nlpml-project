@@ -36,12 +36,13 @@ punctuation = set(string.punctuation)
 
 # Step 1: Download/load the data.
 with codecs.open('wiki.txt', encoding='utf8') as f:
+# with codecs.open('harry-potter-all.txt', encoding='utf8') as f:
     data = f.read()
 
-punctuation.remove("'")
-for p in punctuation:
-    data = data.replace(p, '')
-    print('replaced: ' + p)
+# punctuation.remove("'")
+# for p in punctuation:
+#     data = data.replace(p, '')
+#     print('replaced: ' + p)
 
 words = tf.compat.as_str(data).split()
 
@@ -168,7 +169,7 @@ with graph.as_default():
     init = tf.initialize_all_variables()
 
 # Step 5: Begin training.
-num_steps = 20001  # 100001
+num_steps = 4001  # 100001
 
 with tf.Session(graph=graph) as session:
     # We must initialize all variables before we use them.
@@ -213,20 +214,24 @@ with tf.Session(graph=graph) as session:
 def plot_with_labels(low_dim_embs, labels, filename='tsne.png'):
     assert low_dim_embs.shape[0] >= len(labels), "More labels than embeddings"
     plt.figure(figsize=(18, 18))  # in inches
+    texts = []
     for i, label in enumerate(labels):
         pos = nltk.pos_tag([label])
         ignore_tags = ['DT', 'PRP', 'VB', 'RB', 'IN', 'JJ']
         #if label.lower() not in stopwords and pos[0][1] not in ignore_tags and pos[0][1] == 'NN':
         if label.lower() not in stopwords and label[0].isupper(): #and "'" not in label:
             x, y = low_dim_embs[i, :]
+            texts.append(plt.text(x, y, label))
             plt.scatter(x, y)
-            plt.annotate(label,
-                         xy=(x, y),
-                         xytext=(5, 2),
-                         textcoords='offset points',
-                         ha='right',
-                         va='bottom')
-
+    adjust_text(texts, arrowprops=dict(arrowstyle='-', color='k', lw=0.5))
+            # plt.annotate(label,
+            #              xy=(x, y),
+            #              xytext=next(line_coords),  # xytext=(50, 8),
+            #              textcoords='offset points')
+            #              # arrowprops=dict(arrowstyle='-'))
+            #              # arrowprops=dict(facecolor='black', shrink=0.20))
+            #              # ha='right',
+            #              # va='bottom')
     plt.savefig(filename, dpi=600)
 
 
@@ -235,11 +240,12 @@ try:
     import matplotlib.pyplot as plt
     import nltk
     from nltk import pos_tag
+    from adjustText import adjust_text
 
     stopwords = nltk.corpus.stopwords.words('english')
 
     tsne = TSNE(perplexity=30, n_components=2, init='pca', n_iter=5000)
-    plot_only = 500  # 500
+    plot_only = 300  # 500
     low_dim_embs = tsne.fit_transform(final_embeddings[:plot_only, :])
 
     labels = [reverse_dictionary[i] for i in xrange(plot_only)]

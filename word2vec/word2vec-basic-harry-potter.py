@@ -168,7 +168,7 @@ with graph.as_default():
     init = tf.initialize_all_variables()
 
 # Step 5: Begin training.
-num_steps = 20001  # 100001
+num_steps = 200001  # 100001
 
 with tf.Session(graph=graph) as session:
     # We must initialize all variables before we use them.
@@ -213,6 +213,7 @@ with tf.Session(graph=graph) as session:
 def plot_with_labels(low_dim_embs, labels, filename='tsne.png'):
     assert low_dim_embs.shape[0] >= len(labels), "More labels than embeddings"
     plt.figure(figsize=(18, 18))  # in inches
+    texts = []
     for i, label in enumerate(labels):
         pos = nltk.pos_tag([label])
         ignore_tags = ['DT', 'PRP', 'VB', 'RB', 'IN', 'JJ']
@@ -220,13 +221,13 @@ def plot_with_labels(low_dim_embs, labels, filename='tsne.png'):
         if label.lower() not in stopwords and label[0].isupper() and "'" not in label:
             x, y = low_dim_embs[i, :]
             plt.scatter(x, y)
-            plt.annotate(label,
-                         xy=(x, y),
-                         xytext=(5, 2),
-                         textcoords='offset points',
-                         ha='right',
-                         va='bottom')
-
+    adjust_text(texts, arrowprops=dict(arrowstyle='-', color='k', lw=0.5))
+            # plt.annotate(label,
+                         # xy=(x, y),
+                         # xytext=(5, 2),
+                         # textcoords='offset points',
+                         # ha='right',
+                         # va='bottom')
     plt.savefig(filename, dpi=600)
 
 
@@ -235,6 +236,7 @@ try:
     import matplotlib.pyplot as plt
     import nltk
     from nltk import pos_tag
+    from adjustText import adjust_text
 
     stopwords = nltk.corpus.stopwords.words('english')
 

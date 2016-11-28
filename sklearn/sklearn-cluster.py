@@ -64,15 +64,28 @@ def process_pca(corpus):
     X = x.toarray()
     pca.fit(X)
     components = pca.fit_transform(X)
+
+    newdata = pd.DataFrame({'z1': components[:,0], 'z2': components[:,1], 'text' : corpus})
+    newdata.to_csv('pca-components.csv')
+
+    loadings = pca.components_.argsort()[::-1][:10]
+
+    terms = tfidf.get_feature_names()
+    for c in range(2):
+        print "Component %i" % c
+        for ind in loadings[c,:]:
+            pass
+            # print " %s : %0.3f" %(terms[ind], pca.components_[c,ind])
     return components
 
 
-def plot_scores_and_clusters(X):
+
+def plot_scores_and_clusters(X, corpus):
     # Plotting silhouette scores and the clusters
     # Adapted from http://scikit-learn.org/stable/auto_examples/cluster/
     # plot_kmeans_silhouette_analysis.html
+    # range_n_clusters = [2, 3]
     range_n_clusters = [2, 3, 4, 5, 6, 7, 8, 9]
-    # matplotlib.use('TkAgg')
     for n_clusters in range_n_clusters:
         # Create a subplot with 1 row and 2 columns
         fig, (ax1, ax2) = plt.subplots(1, 2)
@@ -89,9 +102,13 @@ def plot_scores_and_clusters(X):
         # seed of 10 for reproducibility.
         clusterer = KMeans(n_clusters=n_clusters) # random_state=10)
         cluster_labels = clusterer.fit_predict(X)
+
+        # Saving the data with predicted classes
+        newdata = pd.DataFrame({'class' : cluster_labels, 'text' : corpus})
+        newdata.to_csv('classes-clusters-' + str(n_clusters) + '.csv')
+        
         # The silhouette_score gives the average value for all the samples.
-        # This gives a perspective into the density and separation of the formed
-        # clusters
+        # This gives a perspective into the density and separation of the formed clusters
         silhouette_avg = silhouette_score(X, cluster_labels)
         print("For n_clusters =", n_clusters,
               "The average silhouette_score is :", silhouette_avg)
@@ -159,7 +176,7 @@ def main(input_data):
     # data = load_dataframe('data/output/2016-11-26-15h-23m-youtube-comments.csv')
 
     data2 = process_pca(data)
-    plot_scores_and_clusters(data2)
+    plot_scores_and_clusters(data2, data)
 
     return ''
 

@@ -40,7 +40,7 @@ with codecs.open('harry-potter-all.txt', encoding='utf8') as f:
 
 punctuation.remove("'")
 for p in punctuation:
-    data = data.replace(p, ' ')
+    data = data.replace(p, '')
     print('replaced: ' + p)
 
 words = tf.compat.as_str(data).split()
@@ -168,7 +168,7 @@ with graph.as_default():
     init = tf.initialize_all_variables()
 
 # Step 5: Begin training.
-num_steps = 100001  # 100001
+num_steps = 20001  # 100001
 
 with tf.Session(graph=graph) as session:
     # We must initialize all variables before we use them.
@@ -227,7 +227,7 @@ def plot_with_labels(low_dim_embs, labels, filename='tsne.png'):
                          ha='right',
                          va='bottom')
 
-    plt.savefig(filename)
+    plt.savefig(filename, dpi=600)
 
 
 try:

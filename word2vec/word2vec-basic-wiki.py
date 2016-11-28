@@ -233,6 +233,7 @@ def plot_with_labels(low_dim_embs, labels, filename='tsne.png'):
             #              # ha='right',
             #              # va='bottom')
     plt.savefig(filename, dpi=600)
+    subprocess.call(["say 'program completed'"], shell=True)  # notification for OS X
 
 
 try:
@@ -241,6 +242,7 @@ try:
     import nltk
     from nltk import pos_tag
     from adjustText import adjust_text
+    import subprocess
 
     stopwords = nltk.corpus.stopwords.words('english')
 

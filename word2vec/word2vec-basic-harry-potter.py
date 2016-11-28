@@ -220,6 +220,7 @@ def plot_with_labels(low_dim_embs, labels, filename='tsne.png'):
         #if label.lower() not in stopwords and pos[0][1] not in ignore_tags and pos[0][1] == 'NN':
         if label.lower() not in stopwords and label[0].isupper() and "'" not in label:
             x, y = low_dim_embs[i, :]
+            texts.append(plt.text(x, y, label))
             plt.scatter(x, y)
     adjust_text(texts, arrowprops=dict(arrowstyle='-', color='k', lw=0.5))
             # plt.annotate(label,
@@ -229,6 +230,7 @@ def plot_with_labels(low_dim_embs, labels, filename='tsne.png'):
                          # ha='right',
                          # va='bottom')
     plt.savefig(filename, dpi=600)
+    subprocess.call(["say 'program completed'"], shell=True)  # notification for OS X
 
 
 try:
@@ -237,6 +239,7 @@ try:
     import nltk
     from nltk import pos_tag
     from adjustText import adjust_text
+    import subprocess
 
     stopwords = nltk.corpus.stopwords.words('english')
 

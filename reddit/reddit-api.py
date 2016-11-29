@@ -35,7 +35,6 @@ def timestamp_to_utc(timestamp):
     :param timestamp: int - the unix timestamp integer
     :return: utc_data - the date in YYYY-MM-DD format
     """
-    # deprecated pre-10/31/2016
     timestamp = int(str(timestamp)[0:10])
     utc_date = datetime.datetime.utcfromtimestamp(timestamp).strftime('%Y-%m-%d')
     # utc_date = timestamp[0:10]
@@ -83,7 +82,8 @@ def prawler(thread_title, thread_link):
     rd = praw.Reddit(user_agent='Testing Comment Extraction (by /u/let-them-code-py)',
                      client_id='0ZyRF8JSRV1msA', client_secret=api_key_reddit)
                      # username='USERNAME', password='PASSWORD') - not needed for public comments
-    # submission = rd.submission(url='https://www.reddit.com/r/politics/comments/54nrcs/2016_presidential_race_first_presidential/')
+    # submission = rd.submission(url='https://www.reddit.com/r/politics/comments/54nrcs/
+    # 2016_presidential_race_first_presidential/')
     submission = rd.submission(url=thread_link)
     submission.comments.replace_more(limit=0)
 

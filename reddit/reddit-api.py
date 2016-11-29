@@ -20,7 +20,8 @@ api_key_reddit = open('.api_key_reddit').read().strip()
 # Starting up the CSV
 current_timestamp = str(datetime.datetime.now().strftime('%Y-%m-%d-%Hh-%Mm'))  # was .strftime('%Y-%m-%d'))
 csv_file_name = 'reddit/data/output/' + current_timestamp + '-reddit-comments.csv'
-headers = []
+headers = ['thread_title', 'thread_link', 'created_utc',
+           'author', 'body', 'score', 'ups', 'downs']
 with open(csv_file_name, 'a') as csv_file:
     csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     csv_writer.writerow(headers)

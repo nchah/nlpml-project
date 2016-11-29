@@ -18,7 +18,7 @@ quota_counter = 100000
 
 # Starting up the CSV
 current_timestamp = str(datetime.datetime.now().strftime('%Y-%m-%d-%Hh-%Mm'))  # was .strftime('%Y-%m-%d'))
-csv_file_name = 'data/output/' + current_timestamp + '-youtube-comments.csv'
+csv_file_name = 'youtube/data/output/' + current_timestamp + '-youtube-comments.csv'
 headers = ['video_title', 'video_id',
            'comment_id', 'comment_date', 'updated_date', 'commenter_url', 'commenter_name', 'like_count',
            'top_level_comment_num', 'top_level_comment', 'comment_reply']

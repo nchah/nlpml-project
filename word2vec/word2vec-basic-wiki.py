@@ -213,7 +213,7 @@ with tf.Session(graph=graph) as session:
 # Step 6: Visualize the embeddings.
 def plot_with_labels(low_dim_embs, labels, filename='tsne.png'):
     assert low_dim_embs.shape[0] >= len(labels), "More labels than embeddings"
-    plt.figure(figsize=(18, 18))  # in inches
+    plt.figure(figsize=(12, 12))  # in inches
     texts = []
     for i, label in enumerate(labels):
         pos = nltk.pos_tag([label])

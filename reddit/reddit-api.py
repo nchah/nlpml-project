@@ -13,7 +13,6 @@ $ python3 reddit-api.py [path_to_input_file]
 
 """
 
-
 # Globals
 api_key_reddit = open('.api_key_reddit').read().strip()
 
@@ -53,6 +52,7 @@ def store_csv(thread_title, thread_link, comment):
     comment_count += 1
     row = [thread_title, thread_link,
            str(timestamp_to_utc(comment.created_utc)),
+           str(comment_count)
            comment.author,
            comment.body,
            str(comment.score),
@@ -106,6 +106,7 @@ def main(input_data):
             temp_reddit_link = thread.split(",")[1].strip()
             temp_reddit_title = thread.split(",")[0].strip()
             prawler(temp_reddit_title, temp_reddit_link)
+            comment_count = 0
             # store_csv(temp_reddit_title, temp_reddit_link, comments)
 
 

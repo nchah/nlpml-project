@@ -11,12 +11,16 @@ import argparse
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
+import nltk
 import numpy as np
 import pandas as pd
 
 
 # Stopwords - Sklearn's stopwords package
 stopwords = list(text.ENGLISH_STOP_WORDS)
+
+# Stopwords - NLTK implementation
+stopwords = nltk.corpus.stopwords('english')
 
 
 def process_kmeans(corpus):
@@ -70,6 +74,7 @@ def process_pca(corpus):
 
     loadings = pca.components_.argsort()[::-1][:10]
 
+    # TODO: make into separate function
     terms = tfidf.get_feature_names()
     for c in range(2):
         print "Component %i" % c
@@ -81,9 +86,8 @@ def process_pca(corpus):
 
 
 def plot_scores_and_clusters(X, corpus):
-    # Plotting silhouette scores and the clusters
-    # Adapted from http://scikit-learn.org/stable/auto_examples/cluster/
-    # plot_kmeans_silhouette_analysis.html
+    """ Plotting silhouette scores and the clusters
+    Adapted from http://scikit-learn.org/stable/auto_examples/cluster/plot_kmeans_silhouette_analysis.html """
     # range_n_clusters = [2, 3]
     range_n_clusters = [2, 3, 4, 5, 6, 7, 8, 9]
     for n_clusters in range_n_clusters:
@@ -155,7 +159,6 @@ def plot_scores_and_clusters(X, corpus):
         plt.suptitle(("Silhouette analysis for KMeans clustering on sample data "
                       "with n_clusters = %d" % n_clusters),
                      fontsize=12, fontweight='bold')
-        # plt.tight_layout()
         plt.show(block=False)
         plt.savefig('fig-clusters-' + str((n_clusters)) + '.png', dpi=600)
 

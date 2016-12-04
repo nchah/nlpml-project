@@ -109,7 +109,7 @@ def plot_scores_and_clusters(X, corpus):
 
         # Saving the data with predicted classes
         newdata = pd.DataFrame({'class' : cluster_labels, 'text' : corpus})
-        newdata.to_csv('classes-clusters-' + str(n_clusters) + '.csv')
+        newdata.to_csv('rd-labeled-clusters-' + str(n_clusters) + '.csv')
         
         # The silhouette_score gives the average value for all the samples.
         # This gives a perspective into the density and separation of the formed clusters
@@ -160,15 +160,15 @@ def plot_scores_and_clusters(X, corpus):
                       "with n_clusters = %d" % n_clusters),
                      fontsize=12, fontweight='bold')
         plt.show(block=False)
-        plt.savefig('fig-clusters-' + str((n_clusters)) + '.png', dpi=600)
+        plt.savefig('rd-fig-clusters-' + str((n_clusters)) + '.png', dpi=600)
 
 
 
 def load_dataframe(filepath):
     """ Load CSV data as a pandas dataframe """
     data = pd.read_csv(filepath)
-    comments = data['top_level_comment']
-    comments = [str(c).replace('\xef\xbb\xbf', '') for c in comments if c != ' - ']
+    comments = data['comment']
+    # comments = [str(c).replace('\xef\xbb\xbf', '') for c in comments if c != ' - ']
     data = comments
     return data
 

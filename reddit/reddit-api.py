@@ -20,7 +20,7 @@ api_key_reddit = open('.api_key_reddit').read().strip()
 current_timestamp = str(datetime.datetime.now().strftime('%Y-%m-%d-%Hh-%Mm'))  # was .strftime('%Y-%m-%d'))
 csv_file_name = 'reddit/data/output/' + current_timestamp + '-reddit-comments.csv'
 headers = ['thread_title', 'thread_link', 'created_utc',
-           'author', 'body', 'score', 'ups', 'downs']
+           'comment_number', 'author', 'comment', 'score', 'ups', 'downs']
 with open(csv_file_name, 'a') as csv_file:
     csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     csv_writer.writerow(headers)
@@ -52,7 +52,7 @@ def store_csv(thread_title, thread_link, comment):
     comment_count += 1
     row = [thread_title, thread_link,
            str(timestamp_to_utc(comment.created_utc)),
-           str(comment_count)
+           str(comment_count),
            comment.author,
            comment.body,
            str(comment.score),
@@ -75,7 +75,7 @@ def traverse_branch(thread_title, thread_link, c1):
     # comments.append(c1.body)
     if c1.replies:
         for c2 in c1.replies:
-            traverse_branch(thread_title, thread_link, c2)  # iteration
+            traverse_branch(thread_title, thread_link, c2)  # Iteration through comment levels
 
 
 def prawler(thread_title, thread_link):
@@ -109,7 +109,7 @@ def main(input_data):
             with open(csv_file_name[:len(csv_file_name)-4] + "-" + temp_reddit_title + '.csv', 'a') as csv_file2:
                 csv_writer = csv.writer(csv_file2, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
                 csv_writer.writerow(headers)
-            
+
             prawler(temp_reddit_title, temp_reddit_link)
             comment_count = 0
             # store_csv(temp_reddit_title, temp_reddit_link, comments)

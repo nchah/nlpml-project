@@ -26,6 +26,7 @@ with open(csv_file_name, 'a') as csv_file:
     csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     csv_writer.writerow(headers)
 
+
 # Making comment_count global to handle multiple store_csv() calls
 comment_count = 0
 
@@ -157,6 +158,12 @@ def main(input_data):
             # above 'https://' split() will return full string if can't split, so get the last item in split list
             temp_video_id = temp_video_link[len(temp_video_link)-1]
             temp_video_title = video.split(",")[0].strip()
+
+            # Write headers to individual files
+            with open(csv_file_name[:len(csv_file_name)-4] + "-" + temp_video_id + '.csv', 'a') as csv_file2:
+                csv_writer = csv.writer(csv_file2, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                csv_writer.writerow(headers)
+
             comments_list = send_request(resource='commentThreads',
                                          query_volume='all',
                                          video_id=temp_video_id,

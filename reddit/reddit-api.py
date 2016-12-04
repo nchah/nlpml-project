@@ -105,6 +105,11 @@ def main(input_data):
         if thread.strip():  # if non-blank row; not enough to do "if var:"
             temp_reddit_link = thread.split(",")[1].strip()
             temp_reddit_title = thread.split(",")[0].strip()
+            # Write headers for individual file
+            with open(csv_file_name[:len(csv_file_name)-4] + "-" + temp_reddit_title + '.csv', 'a') as csv_file2:
+                csv_writer = csv.writer(csv_file2, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                csv_writer.writerow(headers)
+            
             prawler(temp_reddit_title, temp_reddit_link)
             comment_count = 0
             # store_csv(temp_reddit_title, temp_reddit_link, comments)

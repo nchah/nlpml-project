@@ -32,19 +32,35 @@ from six.moves import xrange  # pylint: disable=redefined-builtin
 import pandas as pd
 import tensorflow as tf
 import nltk
+from nltk import word_tokenize
+from nltk.stem import WordNetLemmatizer
+from nltk.stem.lancaster import LancasterStemmer
 import string
 
 stopwords = nltk.corpus.stopwords.words('english')
 punctuation = set(string.punctuation)
 
 # Step 1: Load the data.
-comments = pd.read_csv('reddit/data/output/2016-12-04-21h-11m-reddit-comments.csv')
-comments = comments['comment']
+comments = pd.read_csv('reddit/data/output/2016-12-04-21h-11m-reddit-comments.csv', encoding='utf-8')
+comments = comments['comment'].tolist()
+
+# Stemming 
+# stemmer = LancasterStemmer()
+# stems = [[stemmer.stem(word) for word in comm] for comm in comments]
+
+# Lemmatizing the text
+comments = [word_tokenize(c) for c in comments]
+
+lemmatizer = WordNetLemmatizer()
+pos_text = [nltk.pos_tag(comm) for comm in comments]
+lemmas = [[lemmatizer.lemmatize(word) for word, tag in comm] for comm in pos_text]
 
 # Merging all individual comments into a single text blob
-data = ""
-for c in comments:
-    data += c + " "
+data = '\n'.join(" ".join(comm) for comm in lemmas)
+
+# data = ""
+# for c in comments:
+#     data += c + " "
 
 # Stopwords and punctuation
 punctuation.remove("'")
@@ -177,7 +193,7 @@ with graph.as_default():
     init = tf.initialize_all_variables()
 
 # Step 5: Begin training.
-num_steps = 20001  # 100001
+num_steps = 50001  # 100001
 
 with tf.Session(graph=graph) as session:
     # We must initialize all variables before we use them.
@@ -227,11 +243,13 @@ def plot_with_labels(low_dim_embs, labels, filename='tsne.png'):
         pos = nltk.pos_tag([label])
         # ignore_tags = ['DT', 'PRP', 'VB', 'RB', 'IN', 'JJ']
         # if label.lower() not in stopwords and pos[0][1] not in ignore_tags and pos[0][1] == 'NN':
-        if label.lower() not in stopwords and label[0].isupper():  # and "'" not in label:
+        if label.lower() not in stopwords \
+        and label[0].isupper() \
+        or label.lower() in emolex_positive or label.lower() in emolex_negative:
             x, y = low_dim_embs[i, :]
             texts.append(plt.text(x, y, label))
             plt.scatter(x, y)
-    # Implements adjusted text labels from external lib. Else, comment out and activate plt.annotate()
+    # Implements adjusted text labels from external lib. Else, activate plt.annotate() below.
     adjust_text(texts, arrowprops=dict(arrowstyle='-', color='k', lw=0.5))
             # plt.annotate(label,
             #              xy=(x, y),
@@ -244,27 +262,34 @@ def plot_with_labels(low_dim_embs, labels, filename='tsne.png'):
     subprocess.call(["say 'program completed'"], shell=True)  # notification for OS X
 
 
-try:
-    from sklearn.manifold import TSNE
-    import matplotlib.pyplot as plt
-    import nltk
-    from nltk import pos_tag
-    from adjustText import adjust_text
-    import subprocess
+# Using the EmoLex lexicon
+emolex = pd.read_table('emolex.txt',
+                        delimiter='\t',header=None, names=['word','emotion','value'],
+                        dtype={'word':unicode,'emotion':unicode,'value':int},
+                        encoding='utf-8')
+# From the EmoLex lexicon, creating the Positive/Negative lists
+emolex_positive = emolex[(emolex.emotion=='positive') & (emolex.value==1)].word.tolist()
+emolex_negative = emolex[(emolex.emotion=='negative') & (emolex.value==1)].word.tolist()
 
-    stopwords = nltk.corpus.stopwords.words('english')
 
-    tsne = TSNE(perplexity=30, n_components=2, init='pca', n_iter=5000)
-    plot_only = 200  # 500
-    low_dim_embs = tsne.fit_transform(final_embeddings[:plot_only, :])
+from sklearn.manifold import TSNE
+import matplotlib.pyplot as plt
+import nltk
+from nltk import pos_tag
+from adjustText import adjust_text
+import subprocess
 
-    labels = [reverse_dictionary[i] for i in xrange(plot_only)]
-    labels = [unicode(word, 'utf-8') for word in labels]
-    print(str(labels))
+stopwords = nltk.corpus.stopwords.words('english')
 
-    print(len(low_dim_embs), len(labels))
+tsne = TSNE(perplexity=30, n_components=2, init='pca', n_iter=5000)
+plot_only = 300  # 500
+low_dim_embs = tsne.fit_transform(final_embeddings[:plot_only, :])
 
-    plot_with_labels(low_dim_embs, labels)
+labels = [reverse_dictionary[i] for i in xrange(plot_only)]
+labels = [unicode(word, 'utf-8') for word in labels]
+print(str(labels))
 
-except ImportError:
-    print("Please install sklearn, matplotlib, and scipy to visualize embeddings.")
+print(len(low_dim_embs), len(labels))
+
+plot_with_labels(low_dim_embs, labels)
+

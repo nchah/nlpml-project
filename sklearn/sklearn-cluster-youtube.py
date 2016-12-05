@@ -6,7 +6,7 @@ from sklearn.feature_extraction import text
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.metrics import silhouette_samples, silhouette_score
 from sklearn.pipeline import Pipeline
-from __future__ import print_function
+# from __future__ import print_function
 import argparse
 import csv
 import matplotlib
@@ -172,8 +172,7 @@ def plot_scores_and_clusters_from_pca(X, corpus):
                       "with n_clusters = %d" % n_clusters),
                      fontsize=12, fontweight='bold')
         plt.show(block=False)
-        plt.savefig('yt-pca-fig-clusters-' + str((n_clusters)) + '.png', dpi=600)
-
+        plt.savefig('yt-pca-clusters-' + str((n_clusters)) + '.png', dpi=600)
 
 
 def load_dataframe(filepath):
@@ -182,13 +181,11 @@ def load_dataframe(filepath):
     data = pd.read_csv(filepath)
     comments = data['top_level_comment']
 
-    # YT comments from the API need quite some cleaning
+    # YT comments from the API need some additional cleaning
+    # Most of the text will be clean of HTML since textFormat=plainText was passed in the API call.
     comments = [str(c).replace('\xef\xbb\xbf', '') for c in comments if c != ' - ']
-    
-    comments = [c.replace("&#39;", "'") for c in comments]
 
-    data = comments
-    return data
+    return comments
 
 
 def main(input_data):

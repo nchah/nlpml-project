@@ -16,6 +16,11 @@ import nltk
 import numpy as np
 import pandas as pd
 
+""" Implements Unsupervised ML method: Clustering
+Running:
+$ python sklearn-cluster-reddit.py [path_to_input_file]
+"""
+
 
 # Stopwords - Sklearn's stopwords package
 stopwords = list(text.ENGLISH_STOP_WORDS)

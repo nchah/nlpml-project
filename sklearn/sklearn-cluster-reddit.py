@@ -8,6 +8,7 @@ from sklearn.metrics import silhouette_samples, silhouette_score
 from sklearn.pipeline import Pipeline
 # from __future__ import print_function
 import argparse
+import csv
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
@@ -34,34 +35,33 @@ def process_kmeans(corpus):
     print silhouette_score(x, km.labels_, metric='euclidean')
 
 
-def get_cluster_terms():
-    # Printing out terms in the clusters
-    centroids = km.cluster_centers_.argsort()[:, ::-1]
+def get_cluster_terms(km_instance, num_clusters, corpus):
+    """ Getting the most important words in each cluster - 
+     the terms with the largest centroids, hence most common, for each cluster """
+    centroids = km_instance.cluster_centers_.argsort()[:, ::-1]
+    tfidf = TfidfVectorizer(stop_words=stopwords, ngram_range=(1,2),max_df=0.7,min_df=10,max_features=100)
+    x = tfidf.fit_transform(corpus)
     terms = tfidf.get_feature_names()
-    for i in range(3):
+    for i in range(num_clusters):
         print "Cluster %d:" % (i+1) 
         for ind in centroids[i, :10]:
-            print ' %s' % terms[ind] 
+            with open('yt-clusters-' + str(num_clusters) + '-and-terms.csv', 'a') as csv_file:
+                csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                csv_writer.writerow([num_clusters, i, terms[ind]])
+            print ' %s' % terms[ind]
 
 
-def get_cluster_scores():
-    # Testing out different K clusters
-    for K in [2,3,4,5,6,7,8,9,10]:
-        km = KMeans(n_clusters=K)
-        km.fit(x)
-        print(silhouette_score(x, km.labels_,metric='euclidean'))
+# DEPRECATED: replaced by plot_scores_and_clusters()
+# def get_cluster_scores():
+#     # Testing out different K clusters
+#     for K in [2,3,4,5,6,7,8,9,10]:
+#         km = KMeans(n_clusters=K)
+#         km.fit(x)
+#         print(silhouette_score(x, km.labels_,metric='euclidean'))
 
 
 def process_pca(corpus):
     """ Implementing PCA """
-    # pipeline = Pipeline([
-    #     ('vect', CountVectorizer()),
-    #     ('tfidf', TfidfTransformer()),
-    # ])
-    # X = pipeline.fit_transform(data).todense()
-    # pca = PCA(n_components=2).fit(X)
-    # data2D = pca.transform(X)
-    # X = data2D
     tfidf = TfidfVectorizer(stop_words='english', ngram_range=(1,2), max_df=0.7, min_df=10, max_features=100)
     x = tfidf.fit_transform(corpus)
     pca = PCA(n_components=2)
@@ -70,7 +70,7 @@ def process_pca(corpus):
     components = pca.fit_transform(X)
 
     newdata = pd.DataFrame({'z1': components[:,0], 'z2': components[:,1], 'text' : corpus})
-    newdata.to_csv('pca-components.csv')
+    newdata.to_csv('rd-pca-components.csv')
 
     loadings = pca.components_.argsort()[::-1][:10]
 
@@ -106,6 +106,9 @@ def plot_scores_and_clusters(X, corpus):
         # seed of 10 for reproducibility.
         clusterer = KMeans(n_clusters=n_clusters) # random_state=10)
         cluster_labels = clusterer.fit_predict(X)
+
+        # Save the most important terms in each cluster
+        get_cluster_terms(clusterer, n_clusters, corpus)
 
         # Saving the data with predicted classes
         newdata = pd.DataFrame({'class' : cluster_labels, 'text' : corpus})

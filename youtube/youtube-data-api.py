@@ -103,6 +103,7 @@ def send_request(resource, query_volume, video_id, video_title, part, max_result
             'part': part,
             'maxResults': max_results,
             'order': order_by,
+            'textFormat': 'plainText',
             'videoId': video_id,
             'key': api_key
         }
@@ -131,6 +132,7 @@ def send_request(resource, query_volume, video_id, video_title, part, max_result
                     'part': part,
                     'maxResults': max_results,
                     'order': order_by,
+                    'textFormat': 'plainText',
                     'videoId': video_id,
                     'pageToken': next_page_token,
                     'key': api_key
@@ -139,7 +141,7 @@ def send_request(resource, query_volume, video_id, video_title, part, max_result
                 comments_list += response_json['items']
                 print(len(comments_list))  # Debug
                 store_csv(video_id, video_title, comments_list)
-                time.sleep(1)
+                time.sleep(10)
                 comments_list = []
             return comments_list
 

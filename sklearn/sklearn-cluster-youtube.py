@@ -6,8 +6,9 @@ from sklearn.feature_extraction import text
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.metrics import silhouette_samples, silhouette_score
 from sklearn.pipeline import Pipeline
-# from __future__ import print_function
+from __future__ import print_function
 import argparse
+import csv
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
@@ -24,44 +25,54 @@ stopwords = nltk.corpus.stopwords.words('english')
 
 
 def process_kmeans(corpus):
-    tfidf = TfidfVectorizer(stop_words='english', max_features=200)
+    # tfidf = TfidfVectorizer(stop_words='english', max_features=200)
     tfidf = TfidfVectorizer(stop_words='english', ngram_range=(1,2), max_df=0.7, min_df=10, max_features=100)
-
     x = tfidf.fit_transform(corpus)
-
     km = KMeans(n_clusters=3)
     km.fit(x)
-    print silhouette_score(x, km.labels_, metric='euclidean')
+    km.predict(x)
 
 
-def get_cluster_terms():
-    # Printing out terms in the clusters
-    centroids = km.cluster_centers_.argsort()[:, ::-1]
-    terms = tfidf.get_feature_names()
-    for i in range(3):
-        print "Cluster %d:" % (i+1) 
-        for ind in centroids[i, :10]:
-            print ' %s' % terms[ind] 
+def plot_scores_and_clusters_from_kmeans(corpus):
+    """ Plotting silhouette scores and the clusters
+    Adapted from http://scikit-learn.org/stable/auto_examples/cluster/plot_kmeans_silhouette_analysis.html """
+    # range_n_clusters = [2, 3]
+    range_n_clusters = [2, 3, 4, 5, 6]
+    for n_clusters in range_n_clusters:
+        # Start Tfidf
+        tfidf = TfidfVectorizer(stop_words='english', ngram_range=(1,2), max_df=0.7, min_df=10, max_features=100)
+        x = tfidf.fit_transform(corpus)
 
-
-def get_cluster_scores():
-    # Testing out different K clusters
-    for K in [2,3,4,5,6,7,8,9,10]:
-        km = KMeans(n_clusters=K)
+        # Initialize the clusterer with n_clusters value
+        # seed of 10 for reproducibility.
+        km = KMeans(n_clusters=n_clusters) # random_state=10)
         km.fit(x)
-        print(silhouette_score(x, km.labels_,metric='euclidean'))
+        cluster_labels = km.predict(x)
+
+        # Saving the data with predicted classes
+        newdata = pd.DataFrame({'label' : km.predict(x), 'text' : corpus})
+        newdata.to_csv('yt-km-labeled-clusters-' + str(n_clusters) + '.csv')
+        
+        # The silhouette_score gives the average value for all the samples.
+        # This gives a perspective into the density and separation of the formed clusters
+        silhouette_avg = silhouette_score(x, km.labels_)
+        print("For n_clusters =", n_clusters,
+              "The average silhouette_score is :", silhouette_avg)
+
+        # Get most important words in each cluster
+        centroids = km.cluster_centers_.argsort()[:, ::-1]
+        terms = tfidf.get_feature_names()
+        for i in range(n_clusters):
+            print "Cluster %d:" % (i+1) 
+            for ind in centroids[i, :10]:
+                with open('yt-km-top-terms-labeled-clusters-' + str(n_clusters) + '.csv', 'a') as csv_file:
+                    csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                    csv_writer.writerow([n_clusters, i, terms[ind]])
+                print ' %s' % terms[ind] 
 
 
 def process_pca(corpus):
     """ Implementing PCA """
-    # pipeline = Pipeline([
-    #     ('vect', CountVectorizer()),
-    #     ('tfidf', TfidfTransformer()),
-    # ])
-    # X = pipeline.fit_transform(data).todense()
-    # pca = PCA(n_components=2).fit(X)
-    # data2D = pca.transform(X)
-    # X = data2D
     tfidf = TfidfVectorizer(stop_words='english', ngram_range=(1,2), max_df=0.7, min_df=10, max_features=100)
     x = tfidf.fit_transform(corpus)
     pca = PCA(n_components=2)
@@ -70,26 +81,27 @@ def process_pca(corpus):
     components = pca.fit_transform(X)
 
     newdata = pd.DataFrame({'z1': components[:,0], 'z2': components[:,1], 'text' : corpus})
-    newdata.to_csv('pca-components.csv')
-
-    loadings = pca.components_.argsort()[::-1][:10]
+    newdata.to_csv('yt-pca-components.csv')
 
     # TODO: make into separate function
-    terms = tfidf.get_feature_names()
-    for c in range(2):
-        print "Component %i" % c
-        for ind in loadings[c,:]:
-            pass
-            # print " %s : %0.3f" %(terms[ind], pca.components_[c,ind])
+    # loadings = pca.components_.argsort()[::-1][:10]
+    # terms = tfidf.get_feature_names()
+    # for c in range(2):
+    #     print "Component %i" % c
+    #     for ind in loadings[c,:]:
+    #         print " %s : %0.3f" %(terms[ind], pca.components_[c,ind])
+    #         with open('yt-pca-components-and-terms.csv', 'a') as csv_file:
+    #             csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    #             csv_writer.writerow([c, terms[ind], pca.components_[c,ind]])
+
     return components
 
 
-
-def plot_scores_and_clusters(X, corpus):
+def plot_scores_and_clusters_from_pca(X, corpus):
     """ Plotting silhouette scores and the clusters
     Adapted from http://scikit-learn.org/stable/auto_examples/cluster/plot_kmeans_silhouette_analysis.html """
     # range_n_clusters = [2, 3]
-    range_n_clusters = [2, 3, 4, 5, 6, 7, 8, 9]
+    range_n_clusters = [2, 3, 4, 5, 6]
     for n_clusters in range_n_clusters:
         # Create a subplot with 1 row and 2 columns
         fig, (ax1, ax2) = plt.subplots(1, 2)
@@ -102,14 +114,14 @@ def plot_scores_and_clusters(X, corpus):
         # The (n_clusters+1)*10 is for inserting blank space between silhouette
         # plots of individual clusters, to demarcate them clearly.
         ax1.set_ylim([0, len(X) + (n_clusters + 1) * 10])
-        # Initialize the clusterer with n_clusters value and a random generator
+        # Initialize the clusterer with n_clusters value
         # seed of 10 for reproducibility.
         clusterer = KMeans(n_clusters=n_clusters) # random_state=10)
         cluster_labels = clusterer.fit_predict(X)
 
         # Saving the data with predicted classes
-        newdata = pd.DataFrame({'class' : cluster_labels, 'text' : corpus})
-        newdata.to_csv('yt-labeled-clusters-' + str(n_clusters) + '.csv')
+        newdata = pd.DataFrame({'label' : cluster_labels, 'text' : corpus})
+        newdata.to_csv('yt-pca-labeled-clusters-' + str(n_clusters) + '.csv')
         
         # The silhouette_score gives the average value for all the samples.
         # This gives a perspective into the density and separation of the formed clusters
@@ -160,15 +172,21 @@ def plot_scores_and_clusters(X, corpus):
                       "with n_clusters = %d" % n_clusters),
                      fontsize=12, fontweight='bold')
         plt.show(block=False)
-        plt.savefig('yt-fig-clusters-' + str((n_clusters)) + '.png', dpi=600)
+        plt.savefig('yt-pca-fig-clusters-' + str((n_clusters)) + '.png', dpi=600)
 
 
 
 def load_dataframe(filepath):
-    """ Load CSV data as a pandas dataframe """
+    """ Load CSV data as a pandas DataFrame 
+    And apply data pre-processing and cleaning """
     data = pd.read_csv(filepath)
     comments = data['top_level_comment']
+
+    # YT comments from the API need quite some cleaning
     comments = [str(c).replace('\xef\xbb\xbf', '') for c in comments if c != ' - ']
+    
+    comments = [c.replace("&#39;", "'") for c in comments]
+
     data = comments
     return data
 
@@ -179,7 +197,9 @@ def main(input_data):
     # data = load_dataframe('data/output/2016-11-26-15h-23m-youtube-comments.csv')
 
     data2 = process_pca(data)
-    plot_scores_and_clusters(data2, data)
+    plot_scores_and_clusters_from_pca(data2, data)
+
+    plot_scores_and_clusters_from_kmeans(data)
 
     return ''
 

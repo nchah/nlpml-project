@@ -57,13 +57,16 @@ def plot_scores_and_clusters_from_kmeans(corpus):
         silhouette_avg = silhouette_score(x, km.labels_)
         print("For n_clusters =", n_clusters,
               "The average silhouette_score is :", silhouette_avg)
+        with open('yt-km-silhouette-scores-labeled-clusters.csv', 'a') as csv_file:
+            csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            csv_writer.writerow([n_clusters, silhouette_avg])
 
         # Get most important words in each cluster
         centroids = km.cluster_centers_.argsort()[:, ::-1]
         terms = tfidf.get_feature_names()
         for i in range(n_clusters):
             print "Cluster %d:" % (i+1) 
-            for ind in centroids[i, :10]:
+            for ind in centroids[i,  :10]:
                 with open('yt-km-top-terms-labeled-clusters-' + str(n_clusters) + '.csv', 'a') as csv_file:
                     csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
                     csv_writer.writerow([n_clusters, i, terms[ind]])

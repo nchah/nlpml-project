@@ -40,7 +40,7 @@ def timestamp_to_utc(timestamp):
     return utc_date
 
 
-def store_csv(thread_title, thread_link, comment):
+def store_csv(thread_title, thread_link, thread_id, comment):
     """Store the traffic stats as a CSV, with schema:
     > Output Schema: [date_time]-comments.csv
     :param video_id: string -
@@ -62,23 +62,23 @@ def store_csv(thread_title, thread_link, comment):
         csv_writer = csv.writer(csv_file1, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         csv_writer.writerow(row)
 
-    with open(csv_file_name[:len(csv_file_name)-4] + "-" + thread_title + '.csv', 'a') as csv_file2:
+    with open(csv_file_name[:len(csv_file_name)-4] + "-" + thread_id + '.csv', 'a') as csv_file2:
         csv_writer = csv.writer(csv_file2, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         csv_writer.writerow(row)
 
     return ''
 
 
-def traverse_branch(thread_title, thread_link, c1):
+def traverse_branch(thread_title, thread_link, thread_id, c1):
     # global comments
-    store_csv(thread_title, thread_link, c1)
+    store_csv(thread_title, thread_link, thread_id, c1)
     # comments.append(c1.body)
     if c1.replies:
         for c2 in c1.replies:
-            traverse_branch(thread_title, thread_link, c2)  # Iteration through comment levels
+            traverse_branch(thread_title, thread_link, thread_id, c2)  # Iteration through comment levels
 
 
-def prawler(thread_title, thread_link):
+def prawler(thread_title, thread_link, thread_id):
     rd = praw.Reddit(user_agent='Testing Comment Extraction (by /u/let-them-code-py)',
                      client_id='0ZyRF8JSRV1msA', client_secret=api_key_reddit)
                      # username='USERNAME', password='PASSWORD') - not needed for public comments
@@ -90,7 +90,7 @@ def prawler(thread_title, thread_link):
     all_comments = submission.comments.list()
 
     for c1 in submission.comments.list():
-        traverse_branch(thread_title, thread_link, c1)
+        traverse_branch(thread_title, thread_link, thread_id, c1)
     
     return ''
 
@@ -99,18 +99,21 @@ def main(input_data):
     """Run top-level logic for API calls
     :param input_data: .txt - has schema: post_title, link
     """
+    global comment_count
     inputs = open(input_data).readlines()
 
     for thread in inputs:
         if thread.strip():  # if non-blank row; not enough to do "if var:"
             temp_reddit_link = thread.split(",")[1].strip()
             temp_reddit_title = thread.split(",")[0].strip()
+            temp_reddit_id = temp_reddit_link.split('/')[6]  # 6th item in URL
             # Write headers for individual file
-            with open(csv_file_name[:len(csv_file_name)-4] + "-" + temp_reddit_title + '.csv', 'a') as csv_file2:
+            with open(csv_file_name[:len(csv_file_name)-4] + "-" + temp_reddit_id + '.csv', 'a') as csv_file2:
                 csv_writer = csv.writer(csv_file2, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
                 csv_writer.writerow(headers)
 
-            prawler(temp_reddit_title, temp_reddit_link)
+            prawler(temp_reddit_title, temp_reddit_link, temp_reddit_id)
+            print(temp_reddit_title + ": " + str(comment_count))
             comment_count = 0
             # store_csv(temp_reddit_title, temp_reddit_link, comments)
 

@@ -30,6 +30,7 @@ def process_kmeans(corpus):
     x = tfidf.fit_transform(corpus)
     km = KMeans(n_clusters=3)
     km.fit(x)
+    km.predict(x)
 
 
 def plot_scores_and_clusters_from_kmeans(corpus):
@@ -43,8 +44,7 @@ def plot_scores_and_clusters_from_kmeans(corpus):
         x = tfidf.fit_transform(corpus)
 
         # Initialize the clusterer with n_clusters value
-        # seed of 10 for reproducibility.
-        km = KMeans(n_clusters=n_clusters) # random_state=10)
+        km = KMeans(n_clusters=n_clusters)
         km.fit(x)
         cluster_labels = km.predict(x)
 
@@ -88,11 +88,12 @@ def process_pca(corpus):
     # for c in range(2):
     #     print "Component %i" % c
     #     for ind in loadings[c,:]:
-    #         pass
-    #         # print " %s : %0.3f" %(terms[ind], pca.components_[c,ind])
+    #         print " %s : %0.3f" %(terms[ind], pca.components_[c,ind])
+    #         with open('yt-pca-components-and-terms.csv', 'a') as csv_file:
+    #             csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    #             csv_writer.writerow([c, terms[ind], pca.components_[c,ind]])
 
     return components
-
 
 
 def plot_scores_and_clusters_from_pca(X, corpus):
@@ -113,12 +114,11 @@ def plot_scores_and_clusters_from_pca(X, corpus):
         # plots of individual clusters, to demarcate them clearly.
         ax1.set_ylim([0, len(X) + (n_clusters + 1) * 10])
         # Initialize the clusterer with n_clusters value
-        # seed of 10 for reproducibility.
-        clusterer = KMeans(n_clusters=n_clusters) # random_state=10)
+        clusterer = KMeans(n_clusters=n_clusters)
         cluster_labels = clusterer.fit_predict(X)
 
         # Saving the data with predicted classes
-        newdata = pd.DataFrame({'class' : cluster_labels, 'text' : corpus})
+        newdata = pd.DataFrame({'label' : cluster_labels, 'text' : corpus})
         newdata.to_csv('rd-pca-labeled-clusters-' + str(n_clusters) + '.csv')
         
         # The silhouette_score gives the average value for all the samples.

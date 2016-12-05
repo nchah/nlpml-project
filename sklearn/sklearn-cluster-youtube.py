@@ -44,8 +44,7 @@ def plot_scores_and_clusters_from_kmeans(corpus):
         x = tfidf.fit_transform(corpus)
 
         # Initialize the clusterer with n_clusters value
-        # seed of 10 for reproducibility.
-        km = KMeans(n_clusters=n_clusters) # random_state=10)
+        km = KMeans(n_clusters=n_clusters)
         km.fit(x)
         cluster_labels = km.predict(x)
 
@@ -115,8 +114,7 @@ def plot_scores_and_clusters_from_pca(X, corpus):
         # plots of individual clusters, to demarcate them clearly.
         ax1.set_ylim([0, len(X) + (n_clusters + 1) * 10])
         # Initialize the clusterer with n_clusters value
-        # seed of 10 for reproducibility.
-        clusterer = KMeans(n_clusters=n_clusters) # random_state=10)
+        clusterer = KMeans(n_clusters=n_clusters)
         cluster_labels = clusterer.fit_predict(X)
 
         # Saving the data with predicted classes

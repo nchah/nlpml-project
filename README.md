@@ -6,7 +6,8 @@ A natural language processing and machine learning project done in part for a Un
 
 This project makes use of a number of libraries and tools.
 
-In the Python environment, the following are used: 
+In the Python environment, the following are used:
+
 General Category | Library
 --- | ---
 Data Generation | `praw`, `requests`

@@ -13,8 +13,8 @@ The scripts in this repository are written to first get the comments data from t
 
 ## Machine Learning
 
-Next, the machine learning techniques are applied using the specialized libraries: NLTK (Natural Language Toolkit), Sklearn (Scikit Learn), and TensorFlow (Python API). 
-The machine learning methods used for this project include supervised methods (classification) and unsupervised methods (clustering, word2vec).
+Next, the machine learning techniques are applied using the specialized libraries: NLTK (Natural Language Toolkit), Sklearn (Scikit Learn), and TensorFlow (Python API) among others.
+The machine learning methods used for this project include supervised methods (classification, SVM) and unsupervised methods (clustering, word2vec).
 
 # Scripts
 
@@ -23,8 +23,10 @@ The following scripts were used for this project according to the following use 
 Script | Use Case
 --- | ---
 `knowledge-graph/knowledge-graph-api.py` | Gets named entities using the Google Knowledge Graph API.
+`nltk/nltk-analytics.py` | Gets various analytics measures on the text data.
 `reddit/reddit-api.py` | Gets Reddit data using the Reddit API (with the PRAW library).
-`sklearn/sklearn-cluster.py` | Implements various clustering and visualization operations.
+`sklearn/sklearn-cluster-*.py` | Implements various clustering and visualization operations.
+`sklearn/sklearn-svm.py` | Implements a Support Vector Machine to distinguish comments.
 `word2vec/word2vec-basic-*.py` | TensorFlow word2vec implementation with modifications for this project.
 `youtube/youtube-data-api.py` | Gets YouTube data using the YouTube Data API.
 

@@ -44,7 +44,8 @@ def load_dataframe(filepath):
         comments = data['top_level_comment']
         # YT comments from the API need some additional cleaning
         # Most of the text will be clean of HTML since textFormat=plainText was passed in the API call.
-        comments = [c.replace(u'\xef\xbb\xbf', u'') for c in comments if c != ' - ']
+        comments = [unicode(c).replace(u'\xef\xbb\xbf', u'') for c in comments if c != ' - ']
+        comments = [c.replace(u'\ufeff', u'') for c in comments]
         return comments
     elif 'reddit' in filepath:
         data = pd.read_csv(filepath, encoding='utf-8')

@@ -23,7 +23,8 @@ def load_dataframe_YT(filepath):
     comments = data['top_level_comment'].tolist()
     # YT comments from the API need some additional cleaning
     # Most of the text will be clean of HTML since textFormat=plainText was passed in the API call.
-    comments = [str(c).replace('\xef\xbb\xbf', '') for c in comments if c != ' - ']
+    comments = [unicode(c).replace(u'\xef\xbb\xbf', u'') for c in comments if c != ' - ']
+    comments = [c.replace(u'\ufeff', u'') for c in comments]
     return comments
 
 

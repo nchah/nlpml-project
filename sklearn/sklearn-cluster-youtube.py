@@ -184,20 +184,18 @@ def plot_scores_and_clusters_from_pca(X, corpus):
 def load_dataframe(filepath):
     """ Load CSV data as a pandas DataFrame 
     And apply data pre-processing and cleaning """
-    data = pd.read_csv(filepath)
+    data = pd.read_csv(filepath, encoding='utf-8')
     comments = data['top_level_comment']
-
     # YT comments from the API need some additional cleaning
     # Most of the text will be clean of HTML since textFormat=plainText was passed in the API call.
-    comments = [str(c).replace('\xef\xbb\xbf', '') for c in comments if c != ' - ']
-
+    comments = [c.replace(u'\xef\xbb\xbf', u'') for c in comments if c != ' - ']
     return comments
 
 
 def main(input_data):
     """ """
     data = load_dataframe(input_data)
-    # data = load_dataframe('data/output/2016-11-26-15h-23m-youtube-comments.csv')
+    # data = load_dataframe('youtube/data/output/2016-12-04-19h-43m-youtube-comments-855Am6ovK7s.csv')
 
     data2 = process_pca(data)
     plot_scores_and_clusters_from_pca(data2, data)

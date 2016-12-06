@@ -193,7 +193,7 @@ with graph.as_default():
     init = tf.initialize_all_variables()
 
 # Step 5: Begin training.
-num_steps = 150001  # 100001
+num_steps = 200001  # 100001
 
 with tf.Session(graph=graph) as session:
     # We must initialize all variables before we use them.
@@ -282,7 +282,7 @@ import subprocess
 stopwords = nltk.corpus.stopwords.words('english')
 
 tsne = TSNE(perplexity=30, n_components=2, init='pca', n_iter=5000)
-plot_only = 300  # 500
+plot_only = 500  # 500
 low_dim_embs = tsne.fit_transform(final_embeddings[:plot_only, :])
 
 labels = [reverse_dictionary[i] for i in xrange(plot_only)]

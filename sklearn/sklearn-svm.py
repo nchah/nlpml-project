@@ -19,7 +19,7 @@ $ python sklearn-svm.py [path_to_Reddit_data] [path_to_YouTube_data]
 def load_dataframe_YT(filepath):
     """ Load CSV data as a pandas DataFrame 
     And apply data pre-processing and cleaning """
-    data = pd.read_csv(filepath)
+    data = pd.read_csv(filepath, encoding='utf-8')
     comments = data['top_level_comment'].tolist()
     # YT comments from the API need some additional cleaning
     # Most of the text will be clean of HTML since textFormat=plainText was passed in the API call.
@@ -64,7 +64,7 @@ def svm():
 
     tfidf = TfidfVectorizer(stop_words='english')
     # tfidf = TfidfVectorizer(stop_words='english', ngram_range=(1,2), max_df=0.7, min_df=10, max_features=100)
-    print tfidf  # For logging the Vectorizer settings on command line output
+    print tfidf  # For logging the settings on command line output
     X = tfidf.fit_transform(all_x)
 
     # Setting training and testing datasets
@@ -77,13 +77,14 @@ def svm():
     # Set the SVC type to use: LinearSVC or SVC
     classifier1 = LinearSVC()
     # classifier1 = SVC(C=1, kernel='rbf')
+    print classifier1  # For logging the settings on command line output
     classifier1.fit(x_train, y_train)
 
     yhat = classifier1.predict(x_test)
     # print yhat  # For debugging
 
     # Predict new values using trained SVM model  # TODO: new function
-    # print classifier1.predict(tfidf.transform([""]))
+    # print classifier1.predict(tfidf.transform(["sounds care comedy makes lies win presidential america president "]))
     
     acc = metrics.accuracy_score(y_test, yhat)
     f1 = metrics.f1_score(y_test, yhat, average='weighted')
@@ -95,9 +96,13 @@ def svm():
 
 
 def show_top10(classifier, vectorizer, categories):
-    """ Get top 10 """
+    """ Get top 10 
+    Note: for LinearSVC(), as per http://scikit-learn.org/stable/modules/svm.html
+    'LinearSVC implements "one-vs-the-rest" multi-class strategy, thus training n_class models. 
+    If there are only two classes, only one model is trained' """
     feature_names = np.asarray(vectorizer.get_feature_names())
-    for i, category in enumerate(categories):
+    # for i, category in enumerate(categories):
+    for category in categories:
         # print classifier.coef_
         top10 = np.argsort(classifier.coef_[0])[-10:]
         print("%s: %s" % (category, " ".join(feature_names[top10])))

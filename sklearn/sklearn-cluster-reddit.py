@@ -184,10 +184,8 @@ def plot_scores_and_clusters_from_pca(X, corpus):
 def load_dataframe(filepath):
     """ Load CSV data as a pandas DataFrame
     And apply data pre-processing and cleaning """
-    data = pd.read_csv(filepath)
+    data = pd.read_csv(filepath, encoding='utf-8')
     comments = data['comment']
-    # comments = [str(c).replace('\xef\xbb\xbf', '') for c in comments if c != ' - ']
-
     return comments
 
 

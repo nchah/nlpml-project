@@ -47,9 +47,12 @@ freq_dist_headers = ['id', 'word', 'frequency']
 ngrams_headers = ['id', 'ngram', 'measure_value', 'measure_type',]
 desc_stats_headers = ['id', 'type', 'value']
 
-# with open(csv_file_name, 'a') as csv_file:
-#     csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-#     csv_writer.writerow(headers)
+# Write headers for each script call
+hr = [freq_dist_headers, ngrams_headers, desc_stats_headers]
+for i, file in enumerate([freq_dist_csv, ngrams_csv, desc_stats_csv]):
+    with open(file, 'a') as csv_file:
+        csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        csv_writer.writerow(hr[i])
 
 
 

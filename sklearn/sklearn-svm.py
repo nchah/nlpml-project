@@ -2,8 +2,9 @@
 
 import argparse
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
-from sklearn.cross_validation import StratifiedKFold, StratifiedShuffleSplit, train_test_split
-# from sklearn.model_selection import StratifiedKFold, StratifiedShuffleSplit, train_test_split
+# from sklearn.cross_validation import StratifiedKFold, StratifiedShuffleSplit, train_test_split
+# Using sklearn.cross_validation brings Deprecation warning 
+from sklearn.model_selection import StratifiedKFold, StratifiedShuffleSplit, train_test_split
 from sklearn.svm import LinearSVC, SVC
 from sklearn import metrics
 import pandas as pd
@@ -43,6 +44,9 @@ def merge_data(rd_data, yt_data):
     y_rd = ['RD' for i in range(len(rd_data))]
     x_yt = yt_data
     y_yt = ['YT' for i in range(len(yt_data))]
+    print "- Sample of RD:", x_rd[:5]
+    print "- Sample of YT:", x_yt[:5]
+
     # Merging all the data into one list of lists. Item orders are maintained.
     all_x = []
     [[all_x.append(i) for i in l] for l in [x_rd, x_yt]]
@@ -60,9 +64,8 @@ def svm():
 
     tfidf = TfidfVectorizer(stop_words='english')
     # tfidf = TfidfVectorizer(stop_words='english', ngram_range=(1,2), max_df=0.7, min_df=10, max_features=100)
-    print tfidf
+    print tfidf  # For logging the Vectorizer settings on command line output
     X = tfidf.fit_transform(all_x)
-    # X2 = tfidf.fit_transform(['trump' 'trump'])
 
     # Setting training and testing datasets
     x_train, x_test, y_train, y_test = train_test_split(X, all_y, test_size=0.3, random_state=0)
@@ -93,7 +96,6 @@ def svm():
 
 def show_top10(classifier, vectorizer, categories):
     """ Get top 10 """
-    # print(np.asarray(vectorizer.get_feature_names()))
     feature_names = np.asarray(vectorizer.get_feature_names())
     for i, category in enumerate(categories):
         # print classifier.coef_

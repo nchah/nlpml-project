@@ -13,7 +13,7 @@ x train: (1496, 5031)
 x test: (642, 5031) 
 y train: 1496 
 y test: 642
-['YT']
+
 The percent correctly predicted is 88.79%.
 The F1 score is 0.888.
              precision    recall  f1-score   support
@@ -51,7 +51,7 @@ x train: (1611, 5307)
 x test: (691, 5307) 
 y train: 1611 
 y test: 691
-['YT']
+
 The percent correctly predicted is 88.71%.
 The F1 score is 0.887.
              precision    recall  f1-score   support
@@ -89,7 +89,7 @@ x train: (1500, 5449)
 x test: (643, 5449) 
 y train: 1500 
 y test: 643
-['YT']
+
 The percent correctly predicted is 88.02%.
 The F1 score is 0.880.
              precision    recall  f1-score   support
@@ -127,7 +127,7 @@ x train: (4608, 10039)
 x test: (1975, 10039) 
 y train: 4608 
 y test: 1975
-['YT']
+
 The percent correctly predicted is 87.34%.
 The F1 score is 0.874.
              precision    recall  f1-score   support

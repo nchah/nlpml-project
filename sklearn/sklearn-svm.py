@@ -83,7 +83,7 @@ def svm():
     # print yhat  # For debugging
 
     # Predict new values using trained SVM model  # TODO: new function
-    print classifier1.predict(tfidf.transform([""]))
+    # print classifier1.predict(tfidf.transform([""]))
     
     acc = metrics.accuracy_score(y_test, yhat)
     f1 = metrics.f1_score(y_test, yhat, average='weighted')

@@ -1,0 +1,150 @@
+nc@nchah:nlpml-project$ python sklearn/sklearn-svm.py reddit/data/output/2016-12-04-21h-11m-reddit-comments-54nrcs.csv youtube/data/output/2016-12-04-19h-43m-youtube-comments-855Am6ovK7s.csv
+- Sample of RD: ['Check out the fresh megathread [here](https://www.reddit.com/r/politics/comments/54or5a/2016_presidential_race_first_presidential/).', "Remember when Trump admitted that he hasn't paid any taxes at all? Lol.", "and then claimed it's good business\n\ni'm amazed he has any support since most of his support is poor and middle class white men, the exact people who get screwed when the rich don't pay taxes", "It's because he's smart.  And wanting the real estate market to dive in 2006 was just good business.\n\nOh, and 'Bigly.'", 'https://twitter.com/jerryspringer/status/780601736327208960\n\nlol']
+- Sample of YT: ["I'm sick and tired of those who say Hillary has no great accomplishments. I \nwould say staying out of prison for the crimes she committed in the last \nfour decades is a great accomplishment.", 'This is almost terrifying to watch! how can any of these two rule a \ncountry! #Nobodyforpresident', "Who's watching this after the election.", 'Yelling over your opponent is not how you win a debate, Donnie.', "LOOOL Trump. Your temperament is terrible.You're a tyrant. Take several \nseats. and OML if Hilary smiles one more time, I swear I'm gonna jump off \nthis roof."]
+Merge completed: 2138
+TfidfVectorizer(analyzer=u'word', binary=False, decode_error=u'strict',
+        dtype=<type 'numpy.int64'>, encoding=u'utf-8', input=u'content',
+        lowercase=True, max_df=1.0, max_features=None, min_df=1,
+        ngram_range=(1, 1), norm=u'l2', preprocessor=None, smooth_idf=True,
+        stop_words='english', strip_accents=None, sublinear_tf=False,
+        token_pattern=u'(?u)\\b\\w\\w+\\b', tokenizer=None, use_idf=True,
+        vocabulary=None)
+x train: (1496, 5031) 
+x test: (642, 5031) 
+y train: 1496 
+y test: 642
+['YT']
+The percent correctly predicted is 88.79%.
+The F1 score is 0.888.
+             precision    recall  f1-score   support
+
+         RD       0.90      0.85      0.88       298
+         YT       0.88      0.92      0.90       344
+
+avg / total       0.89      0.89      0.89       642
+
+RD: sounds care comedy make lies win presidential america president country
+sounds 0.928664881542
+care 0.929302848924
+comedy 0.953648796708
+make 0.985816976525
+lies 0.989011003016
+win 1.06302102613
+presidential 1.07026688873
+america 1.09446901306
+president 1.16529168119
+country 1.23951088372
+
+
+nc@nchah:nlpml-project$ python sklearn/sklearn-svm.py reddit/data/output/2016-12-04-21h-11m-reddit-comments-56psaa.csv youtube/data/output/2016-12-04-19h-43m-youtube-comments-FRlI2SQ0Ueg.csv 
+- Sample of RD: ['[Returning to the routine after the debate.](http://i.imgur.com/k5XrRZt.jpg)', 'I thought I was hallucinating when they did that close zoom in on Hillary\'s face. "Am I watching SNL by accident?"', "They're so totally doing that next week.\n\nAnd the fly.", 'I hope they can get Jeff Goldblum to reprise the role.', 'I thought the fly was in our house']
+- Sample of YT: ["Let's play Russian roulette \n\n\n\n\n\n\nevery 2th like dies", 'Stop asking him about the stupid bus', "I can't stand that wicked fake smiling bitch Hillary Clinton.", 'Well well well, that smirk that was on her face thru this debate was \nremoved by the American people. She has been knocked off her throne, never \nto regain her seat again! Way to go America! Way to go.....', "lol who's just only tuning in to the debates now Trump has won. certainly \nme!\xf0\x9f\x98\x85\xf0\x9f\x99\x88"]
+Merge completed: 2302
+TfidfVectorizer(analyzer=u'word', binary=False, decode_error=u'strict',
+        dtype=<type 'numpy.int64'>, encoding=u'utf-8', input=u'content',
+        lowercase=True, max_df=1.0, max_features=None, min_df=1,
+        ngram_range=(1, 1), norm=u'l2', preprocessor=None, smooth_idf=True,
+        stop_words='english', strip_accents=None, sublinear_tf=False,
+        token_pattern=u'(?u)\\b\\w\\w+\\b', tokenizer=None, use_idf=True,
+        vocabulary=None)
+x train: (1611, 5307) 
+x test: (691, 5307) 
+y train: 1611 
+y test: 691
+['YT']
+The percent correctly predicted is 88.71%.
+The F1 score is 0.887.
+             precision    recall  f1-score   support
+
+         RD       0.88      0.88      0.88       333
+         YT       0.89      0.89      0.89       358
+
+avg / total       0.89      0.89      0.89       691
+
+RD: good lol americans trump vote care america hillary hilary war
+good 1.03045693654
+lol 1.05205702231
+americans 1.07243802227
+trump 1.07499579014
+vote 1.13136521443
+care 1.17682802166
+america 1.46445553424
+hillary 1.54448671549
+hilary 1.54734010403
+war 1.61388805186
+
+
+nc@nchah:nlpml-project$ python sklearn/sklearn-svm.py reddit/data/output/2016-12-04-21h-11m-reddit-comments-58eh18.csv youtube/data/output/2016-12-04-19h-43m-youtube-comments-smkyorC5qwc.csv 
+- Sample of RD: ["So it turns out that Obama's weird brother served no purpose at all. That's interesting.", "Somehow Clinton found the strength not to be distracted by a man she's never met. ", "It seems Trump forgot that he's not actually running against Obama.", "Has he remembered that he's not running against Bill Clinton yet?", "Chris Wallace: *I know you didn't agree to closing statements, but fuck you both you're doing one.*\n\n"]
+- Sample of YT: ["I'm Irish and I don't care\xf0\x9f\x98\x82\xf0\x9f\x87\xa8\xf0\x9f\x87\xae\xf0\x9f\x96\x95\xf0\x9f\x8f\xbb", 'Trump and Clinton are merely two different symptoms of the same fatal \ndisease', 'Both Trump and Clinton are unworthy. KICK THEM BOTH OUT!', 'Trump Supporters: I implore you when you vote, triple check your selection. \nIf the machine\'s a "Smartmatic", then it\'s a potentially rigged machine \nowned by George Soros. Demand a Paper Ballot.\n\nhttp://thetruthdivision.com/2016/10/alert-see-smartmatic-voting-booth-polls-heres-must/\n', "God it's funny to hear Hillary talk about the Supreme Court since she \nwithheld tons of information from them and was completely uncooperative."]
+Merge completed: 2143
+TfidfVectorizer(analyzer=u'word', binary=False, decode_error=u'strict',
+        dtype=<type 'numpy.int64'>, encoding=u'utf-8', input=u'content',
+        lowercase=True, max_df=1.0, max_features=None, min_df=1,
+        ngram_range=(1, 1), norm=u'l2', preprocessor=None, smooth_idf=True,
+        stop_words='english', strip_accents=None, sublinear_tf=False,
+        token_pattern=u'(?u)\\b\\w\\w+\\b', tokenizer=None, use_idf=True,
+        vocabulary=None)
+x train: (1500, 5449) 
+x test: (643, 5449) 
+y train: 1500 
+y test: 643
+['YT']
+The percent correctly predicted is 88.02%.
+The F1 score is 0.880.
+             precision    recall  f1-score   support
+
+         RD       0.86      0.88      0.87       287
+         YT       0.90      0.88      0.89       356
+
+avg / total       0.88      0.88      0.88       643
+
+RD: american idiot president country hilary nbc hillary dont make trump
+american 0.97563433882
+idiot 0.986854592164
+president 0.992361955698
+country 1.03413750942
+hilary 1.15160229308
+nbc 1.23934651741
+hillary 1.26478384504
+dont 1.30147803617
+make 1.32671735535
+trump 1.48791602677
+
+
+nc@nchah:nlpml-project$ python sklearn/sklearn-svm.py reddit/data/output/2016-12-04-21h-11m-reddit-comments.csv youtube/data/output/2016-12-04-19h-43m-youtube-comments.csv 
+- Sample of RD: ['Check out the fresh megathread [here](https://www.reddit.com/r/politics/comments/54or5a/2016_presidential_race_first_presidential/).', "Remember when Trump admitted that he hasn't paid any taxes at all? Lol.", "and then claimed it's good business\n\ni'm amazed he has any support since most of his support is poor and middle class white men, the exact people who get screwed when the rich don't pay taxes", "It's because he's smart.  And wanting the real estate market to dive in 2006 was just good business.\n\nOh, and 'Bigly.'", 'https://twitter.com/jerryspringer/status/780601736327208960\n\nlol']
+- Sample of YT: ["I'm sick and tired of those who say Hillary has no great accomplishments. I \nwould say staying out of prison for the crimes she committed in the last \nfour decades is a great accomplishment.", 'This is almost terrifying to watch! how can any of these two rule a \ncountry! #Nobodyforpresident', "Who's watching this after the election.", 'Yelling over your opponent is not how you win a debate, Donnie.', "LOOOL Trump. Your temperament is terrible.You're a tyrant. Take several \nseats. and OML if Hilary smiles one more time, I swear I'm gonna jump off \nthis roof."]
+Merge completed: 6583
+TfidfVectorizer(analyzer=u'word', binary=False, decode_error=u'strict',
+        dtype=<type 'numpy.int64'>, encoding=u'utf-8', input=u'content',
+        lowercase=True, max_df=1.0, max_features=None, min_df=1,
+        ngram_range=(1, 1), norm=u'l2', preprocessor=None, smooth_idf=True,
+        stop_words='english', strip_accents=None, sublinear_tf=False,
+        token_pattern=u'(?u)\\b\\w\\w+\\b', tokenizer=None, use_idf=True,
+        vocabulary=None)
+x train: (4608, 10039) 
+x test: (1975, 10039) 
+y train: 4608 
+y test: 1975
+['YT']
+The percent correctly predicted is 87.34%.
+The F1 score is 0.874.
+             precision    recall  f1-score   support
+
+         RD       0.85      0.88      0.86       895
+         YT       0.89      0.87      0.88      1080
+
+avg / total       0.87      0.87      0.87      1975
+
+RD: president hillary reply country kids trump hilary usa americans win
+president 1.27833383059
+hillary 1.3245494726
+reply 1.34343407251
+country 1.37468228069
+kids 1.40461991526
+trump 1.4286954002
+hilary 1.63237875212
+usa 1.63901091522
+americans 1.65987507003
+win 1.75313427269

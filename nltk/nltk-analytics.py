@@ -1,13 +1,17 @@
 #!/usr/bin/env python
 
 
-from nltk import word_tokenize
+from __future__ import division
+from hyphen import Hyphenator, dict_info
+from nltk import word_tokenize, sent_tokenize
 from nltk.collocations import *
+from numpy import sum, mean
 from pprint import pprint
 import argparse
 import csv
 import nltk
 import string
+import numpy as np
 import pandas as pd
 
 """
@@ -55,7 +59,6 @@ for i, file in enumerate([freq_dist_csv, ngrams_csv, desc_stats_csv]):
         csv_writer.writerow(hr[i])
 
 
-
 def load_dataframe(filepath):
     """ Load CSV data as a pandas DataFrame 
     And apply data pre-processing and cleaning """
@@ -87,7 +90,7 @@ def freq_dist(data):
     ignore_var = [[merged_comments.append(w) for w in c] for c in comments]
 
     text_FD = nltk.FreqDist(merged_comments).most_common(20)
-    pprint(text_FD)
+    # pprint(text_FD)
 
     for i1, i2 in text_FD:
         with open(freq_dist_csv, 'a') as csv_file:
@@ -117,8 +120,8 @@ def collocations(data):
     bigram_finder = BigramCollocationFinder.from_words(merged_comments)
     bigram_finder.apply_freq_filter(5)
     bigrams = bigram_finder.nbest(bigram_stats.pmi, 10)
-    for n1, n2 in bigrams:
-        print n1, n2, bigram_finder.score_ngram(bigram_stats.pmi, n1, n2)
+    # for n1, n2 in bigrams:
+    #     print n1, n2, bigram_finder.score_ngram(bigram_stats.pmi, n1, n2)
 
     for n1, n2 in bigrams:
         sample = ''
@@ -135,8 +138,8 @@ def collocations(data):
     trigram_finder = TrigramCollocationFinder.from_words(merged_comments, window_size=3)
     trigram_finder.apply_freq_filter(5)
     trigrams = trigram_finder.nbest(trigram_stats.pmi, 10)
-    for n1, n2, n3 in trigrams:
-        print n1, n2, n3, trigram_finder.score_ngram(trigram_stats.pmi, n1, n2, n3)
+    # for n1, n2, n3 in trigrams:
+    #     print n1, n2, n3, trigram_finder.score_ngram(trigram_stats.pmi, n1, n2, n3)
 
     for n1, n2, n3 in trigrams:
         sample = ''
@@ -150,18 +153,69 @@ def collocations(data):
 
 
 def desc_stats(data):
-    """ """
+    """ Descriptive statistics """
     lens = []
-    for c in data:
-        lens.append(len(c))
+    for comm in data:
+        lens.append(len(comm))
     ln = pd.DataFrame(lens)
     desc = ln[0].describe().to_dict()
-    print desc
+    # avg_ttr = pd.DataFrame(ttr(data)).mean()[0]
+    # desc['avg_TTR:'] = str(avg_ttr)
+    # print desc
 
     for i in desc:
         with open(desc_stats_csv, 'a') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             csv_writer.writerow([resource_id, i, desc[i]])
+
+
+def ttr(data):
+    """ Type-Token Ratio """
+    ttr = []
+    for comm in data:
+        text = word_tokenize(comm)
+        types = set(text)
+        ttr_temp = len(types)/len(text)
+        ttr.append(ttr_temp)
+    ttr = pd.DataFrame(ttr)
+    ttr_val = ttr[0].describe().to_dict()
+
+    for i in ttr_val:
+        with open(desc_stats_csv, 'a') as csv_file:
+            csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            csv_writer.writerow([resource_id, 'TTR_'+i, ttr_val[i]])
+
+
+def flesch_reading_score(data):
+    """ Flesch Reading Ease Score """
+    comments = [word_tokenize(c.lower()) for c in data]
+    fre = []
+    # h_en = Hyphenator('en_US')  # Tried PyHyphen
+    # len(h_en.syllables(u'and'))  # but not good performance on these cases
+
+    from nltk.corpus import cmudict
+    d = cmudict.dict()
+
+    for i, comm in enumerate(comments[:3]):
+        twords = len(comm)
+        tsents = len(sent_tokenize(data[i]))
+        tsyllb_temp = []
+        for w in comm:
+            if w in d:
+                phonemes = d[w]
+                syllables = [sum(x[-1].isdigit() for x in p) for p in phonemes]
+                tsyllb_temp.append(max(syllables))
+        tsyllb = np.sum(tsyllb_temp)
+
+        FRE = 206.835 - 1.015 * (twords / tsents) - 84.6 * (tsyllb / twords)
+        fre.append(FRE)
+    fre = pd.DataFrame(fre)
+    fre = fre[0].describe().to_dict()
+
+    for i in fre:
+        with open(desc_stats_csv, 'a') as csv_file:
+            csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            csv_writer.writerow([resource_id, 'FRE_'+i, fre[i]])
 
 
 def main(input_data):
@@ -170,6 +224,10 @@ def main(input_data):
     freq_dist(comments_data)
     collocations(comments_data)
     desc_stats(comments_data)
+    ttr(comments_data)
+    flesch_reading_score(comments_data)
+
+    print("Done: " + input_data)
 
 
 if __name__ == '__main__':

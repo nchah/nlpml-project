@@ -22,7 +22,7 @@ punctuation += ['...', "''", '``']  # To add items
 """ ['!', '#', '"', '%', '$', "'", '&', ')', '(', '+', '*', '-', ',', '/', '.', ';', ':', '=', '<', '?', 
 '>', '@', '[', ']', '\\', '_', '^', '`', '{', '}', '|', '~'] """
 stopwords = nltk.corpus.stopwords.words('english')
-stopwords += []  # To add items 
+stopwords += ["'s", "n't", "'m"]  # To add items 
 """ [u'i', u'me', u'my', u'myself', u'we', u'our', u'ours', u'ourselves', u'you', u'your', u'yours', u'yourself', 
 u'yourselves', u'he', u'him', u'his', u'himself', u'she', u'her', u'hers', u'herself', u'it', u'its', u'itself', 
 u'they', u'them', u'their', u'theirs', u'themselves', u'what', u'which', u'who', u'whom', u'this', u'that', 
@@ -44,7 +44,7 @@ ngrams_csv = fd + 'nltk-ngrams.csv'
 desc_stats_csv = fd + 'nltk-desc-stats.csv'
 
 freq_dist_headers = ['id', 'word', 'frequency']
-ngrams_headers = ['id', 'ngram', 'measure_value', 'measure_type',]
+ngrams_headers = ['id', 'ngram', 'measure_value', 'measure_type', 'samples']
 desc_stats_headers = ['id', 'type', 'value']
 
 # Write headers for each script call
@@ -97,13 +97,14 @@ def freq_dist(data):
 
 def collocations(data):
     """ N-grams """
+    data2 = [c.lower() for c in data]
     comments = [word_tokenize(c) for c in data]
     comments = [[w.lower() for w in c if w not in punctuation] for c in comments]
 
     merged_comments = []  # Init ignore_var or else list comprehension spams the terminal output
     ignore_var = [[merged_comments.append(w) for w in c] for c in comments]
 
-    pprint(nltk.Text(merged_comments).collocations())
+    # pprint(nltk.Text(merged_comments).collocations())
 
     # Simple implementation:
     # ngrams = nltk.ngrams(merged_comments, 4)
@@ -120,11 +121,16 @@ def collocations(data):
         print n1, n2, bigram_finder.score_ngram(bigram_stats.pmi, n1, n2)
 
     for n1, n2 in bigrams:
+        sample = ''
+        for comm in data2:
+            if n1 + " " + n2 in comm:
+                sample += '- - ' + comm + '\n\n'
         score = bigram_finder.score_ngram(bigram_stats.pmi, n1, n2)
         with open(ngrams_csv, 'a') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            csv_writer.writerow([resource_id, n1+' '+n2, score, 'pmi'])
-
+            csv_writer.writerow([resource_id, n1+' '+n2, score, 'pmi', sample.encode('utf-8')])
+    
+    # Trigrams
     trigram_stats = nltk.collocations.TrigramAssocMeasures()
     trigram_finder = TrigramCollocationFinder.from_words(merged_comments, window_size=3)
     trigram_finder.apply_freq_filter(5)
@@ -133,10 +139,14 @@ def collocations(data):
         print n1, n2, n3, trigram_finder.score_ngram(trigram_stats.pmi, n1, n2, n3)
 
     for n1, n2, n3 in trigrams:
+        sample = ''
+        for comm in data2:
+            if n1 + " " + n2 + " " + n3 in comm:
+                sample += '- - ' + comm + '\n\n'
         score = trigram_finder.score_ngram(trigram_stats.pmi, n1, n2, n3)
         with open(ngrams_csv, 'a') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            csv_writer.writerow([resource_id, n1+' '+n2+' '+n3, score, 'pmi'])
+            csv_writer.writerow([resource_id, n1+' '+n2+' '+n3, score, 'pmi', sample.encode('utf-8')])
 
 
 def desc_stats(data):

@@ -166,7 +166,7 @@ def desc_stats(data):
     for i in desc:
         with open(desc_stats_csv, 'a') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            csv_writer.writerow([resource_id, i, desc[i]])
+            csv_writer.writerow([resource_id, 'len_'+i, desc[i]])
 
 
 def ttr(data):
@@ -196,7 +196,7 @@ def flesch_reading_score(data):
     from nltk.corpus import cmudict
     d = cmudict.dict()
 
-    for i, comm in enumerate(comments[:3]):
+    for i, comm in enumerate(comments):
         twords = len(comm)
         tsents = len(sent_tokenize(data[i]))
         tsyllb_temp = []
@@ -207,7 +207,7 @@ def flesch_reading_score(data):
                 tsyllb_temp.append(max(syllables))
         tsyllb = np.sum(tsyllb_temp)
 
-        FRE = 206.835 - 1.015 * (twords / tsents) - 84.6 * (tsyllb / twords)
+        FRE = 206.835 - (1.015 * (twords / tsents)) - (84.6 * (tsyllb / twords))
         fre.append(FRE)
     fre = pd.DataFrame(fre)
     fre = fre[0].describe().to_dict()

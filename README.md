@@ -38,6 +38,7 @@ Script | Use Case
 --- | ---
 `knowledge-graph/knowledge-graph-api.py` | Gets named entities using the Google Knowledge Graph API.
 `nltk/nltk-analytics.py` | Gets various analytics measures on the text data.
+`nltk/nltk-scripts.sh` | Bash script to run a set of commands.
 `reddit/reddit-api.py` | Gets Reddit data using the Reddit API (with the PRAW library).
 `sklearn/sklearn-cluster-*.py` | Implements various clustering and visualization operations.
 `sklearn/sklearn-svm.py` | Implements a Support Vector Machine to distinguish comments.

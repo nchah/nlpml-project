@@ -38,12 +38,13 @@ Script | Use Case
 --- | ---
 `knowledge-graph/knowledge-graph-api.py` | Gets named entities using the Google Knowledge Graph API.
 `nltk/nltk-analytics.py` | Gets various analytics measures on the text data.
-`nltk/nltk-scripts.sh` | Bash script to run a set of commands.
+`nltk/nltk-scripts.sh` | Bash script to run a set of the nltk-analytics commands.
 `reddit/reddit-api.py` | Gets Reddit data using the Reddit API (with the PRAW library).
-`sklearn/sklearn-cluster-*.py` | Implements various clustering and visualization operations.
-`sklearn/sklearn-svm.py` | Implements a Support Vector Machine to distinguish comments.
+`sklearn/sklearn-cluster-*.py` | (Unsupervised ML) Implements various clustering and visualization operations.
+`sklearn/sklearn-lda-*.py` | (Unsupervised ML) Latent Dirichlet Allocation
+`sklearn/sklearn-svm.py` | (Supervised ML) Implements a Support Vector Machine to distinguish comments.
 `word2vec/word2vec-basic-*.py` | TensorFlow word2vec implementation with modifications for this project.
-`youtube/youtube-data-api.py` | Gets YouTube data using the YouTube Data API.
+`youtube/youtube-data-api.py` | (Unsupervised ML) Gets YouTube data using the YouTube Data API.
 
 
 

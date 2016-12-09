@@ -29,13 +29,13 @@ stopwords = list(text.ENGLISH_STOP_WORDS)
 stopwords = nltk.corpus.stopwords.words('english')
 
 
-def process_kmeans(corpus):
-    # tfidf = TfidfVectorizer(stop_words='english', max_features=200)
-    tfidf = TfidfVectorizer(stop_words='english', ngram_range=(1,2), max_df=0.7, min_df=10, max_features=100)
-    x = tfidf.fit_transform(corpus)
-    km = KMeans(n_clusters=3)
-    km.fit(x)
-    km.predict(x)
+# def process_kmeans(corpus):
+#     # tfidf = TfidfVectorizer(stop_words='english', max_features=200)
+#     tfidf = TfidfVectorizer(stop_words='english', ngram_range=(1,2), max_df=0.7, min_df=10, max_features=100)
+#     x = tfidf.fit_transform(corpus)
+#     km = KMeans(n_clusters=3)
+#     km.fit(x)
+#     km.predict(x)
 
 
 def plot_scores_and_clusters_from_kmeans(corpus):
@@ -55,7 +55,7 @@ def plot_scores_and_clusters_from_kmeans(corpus):
 
         # Saving the data with predicted classes
         newdata = pd.DataFrame({'label' : km.predict(x), 'text' : corpus})
-        newdata.to_csv('yt-km-labeled-clusters-' + str(n_clusters) + '.csv')
+        newdata.to_csv('yt-km-labeled-clusters-' + str(n_clusters) + '.csv', encoding='utf-8')
         
         # The silhouette_score gives the average value for all the samples.
         # This gives a perspective into the density and separation of the formed clusters
@@ -88,7 +88,7 @@ def process_pca(corpus):
     components = pca.fit_transform(X)
 
     newdata = pd.DataFrame({'z1': components[:,0], 'z2': components[:,1], 'text' : corpus})
-    newdata.to_csv('yt-pca-components.csv')
+    newdata.to_csv('yt-pca-components.csv', encoding='utf-8')
 
     # TODO: make into separate function
     # loadings = pca.components_.argsort()[::-1][:10]
@@ -127,7 +127,7 @@ def plot_scores_and_clusters_from_pca(X, corpus):
 
         # Saving the data with predicted classes
         newdata = pd.DataFrame({'label' : cluster_labels, 'text' : corpus})
-        newdata.to_csv('yt-pca-labeled-clusters-' + str(n_clusters) + '.csv')
+        newdata.to_csv('yt-pca-labeled-clusters-' + str(n_clusters) + '.csv', encoding='utf-8')
         
         # The silhouette_score gives the average value for all the samples.
         # This gives a perspective into the density and separation of the formed clusters

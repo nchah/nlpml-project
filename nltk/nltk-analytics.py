@@ -157,16 +157,39 @@ def desc_stats(data):
     lens = []
     for comm in data:
         lens.append(len(comm))
-    ln = pd.DataFrame(lens)
-    desc = ln[0].describe().to_dict()
+    lens = pd.DataFrame(lens)
+    lens = lens[0].describe().to_dict()
     # avg_ttr = pd.DataFrame(ttr(data)).mean()[0]
     # desc['avg_TTR:'] = str(avg_ttr)
     # print desc
 
-    for i in desc:
+    for i in lens:
         with open(desc_stats_csv, 'a') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            csv_writer.writerow([resource_id, 'len_'+i, desc[i]])
+            csv_writer.writerow([resource_id, 'char_len_'+i, lens[i]])
+
+    # Stats for # of words, # of sents
+    num_words = []
+    for comm in data:
+        num_words.append(len(word_tokenize(comm)))
+    num_words = pd.DataFrame(num_words)
+    num_words = num_words[0].describe().to_dict()
+
+    for i in num_words:
+        with open(desc_stats_csv, 'a') as csv_file:
+            csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            csv_writer.writerow([resource_id, 'word_len_'+i, num_words[i]])
+
+    num_sents = []
+    for comm in data:
+        num_sents.append(len(sent_tokenize(comm)))
+    num_sents = pd.DataFrame(num_sents)
+    num_sents = num_sents[0].describe().to_dict()
+
+    for i in num_sents:
+        with open(desc_stats_csv, 'a') as csv_file:
+            csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            csv_writer.writerow([resource_id, 'sent_len_'+i, num_sents[i]])
 
 
 def ttr(data):

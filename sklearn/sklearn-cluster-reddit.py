@@ -132,7 +132,7 @@ def plot_scores_and_clusters_from_pca(X, corpus):
         # The silhouette_score gives the average value for all the samples.
         # This gives a perspective into the density and separation of the formed clusters
         silhouette_avg = silhouette_score(X, cluster_labels)
-        print("PCA: For n_clusters =", n_clusters,
+        print("PCA:For n_clusters =", n_clusters,
               "The average silhouette_score is :", silhouette_avg)
         # Compute the silhouette scores for each sample
         sample_silhouette_values = silhouette_samples(X, cluster_labels)

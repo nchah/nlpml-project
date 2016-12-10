@@ -74,6 +74,7 @@ def svm():
           "x test:", x_test.shape, '\n', \
           "y train:", len(y_train), '\n', \
           "y test:", len(y_test)
+    # print y_train  # Verified that distribution of labels was randomized
 
     # Set the SVC type to use: LinearSVC or SVC
     classifier1 = LinearSVC()

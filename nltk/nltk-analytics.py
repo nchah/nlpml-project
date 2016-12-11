@@ -7,6 +7,7 @@ from nltk import word_tokenize, sent_tokenize
 from nltk.collocations import *
 from numpy import sum, mean
 from pprint import pprint
+from scipy import stats
 import argparse
 import csv
 import nltk

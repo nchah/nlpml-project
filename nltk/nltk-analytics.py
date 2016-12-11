@@ -154,46 +154,50 @@ def collocations(data):
 
 def desc_stats(data):
     """ Descriptive statistics """
+    global lens, num_words, num_sents
+
     lens = []
     for comm in data:
         lens.append(len(comm))
     lens = pd.DataFrame(lens)
-    lens = lens[0].describe().to_dict()
+    lens_stats = lens[0].describe().to_dict()
     # avg_ttr = pd.DataFrame(ttr(data)).mean()[0]
     # desc['avg_TTR:'] = str(avg_ttr)
     # print desc
 
-    for i in lens:
+    for i in lens_stats:
         with open(desc_stats_csv, 'a') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            csv_writer.writerow([resource_id, 'char_len_'+i, lens[i]])
+            csv_writer.writerow([resource_id, 'char_len_'+i, lens_stats[i]])
 
     # Stats for # of words, # of sents
     num_words = []
     for comm in data:
         num_words.append(len(word_tokenize(comm)))
     num_words = pd.DataFrame(num_words)
-    num_words = num_words[0].describe().to_dict()
+    num_words_stats = num_words[0].describe().to_dict()
 
-    for i in num_words:
+    for i in num_words_stats:
         with open(desc_stats_csv, 'a') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            csv_writer.writerow([resource_id, 'word_len_'+i, num_words[i]])
+            csv_writer.writerow([resource_id, 'word_len_'+i, num_words_stats[i]])
 
     num_sents = []
     for comm in data:
         num_sents.append(len(sent_tokenize(comm)))
     num_sents = pd.DataFrame(num_sents)
-    num_sents = num_sents[0].describe().to_dict()
+    num_sents_stats = num_sents[0].describe().to_dict()
 
-    for i in num_sents:
+    for i in num_sents_stats:
         with open(desc_stats_csv, 'a') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            csv_writer.writerow([resource_id, 'sent_len_'+i, num_sents[i]])
+            csv_writer.writerow([resource_id, 'sent_len_'+i, num_sents_stats[i]])
 
 
 def ttr(data):
     """ Type-Token Ratio """
+    global ttr
+
     ttr = []
     for comm in data:
         text = word_tokenize(comm)
@@ -201,16 +205,18 @@ def ttr(data):
         ttr_temp = len(types)/len(text)
         ttr.append(ttr_temp)
     ttr = pd.DataFrame(ttr)
-    ttr_val = ttr[0].describe().to_dict()
+    ttr_stats = ttr[0].describe().to_dict()
 
-    for i in ttr_val:
+    for i in ttr_stats:
         with open(desc_stats_csv, 'a') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            csv_writer.writerow([resource_id, 'TTR_'+i, ttr_val[i]])
+            csv_writer.writerow([resource_id, 'TTR_'+i, ttr_stats[i]])
 
 
 def flesch_reading_score(data):
     """ Flesch Reading Ease Score """
+    global fre
+
     comments = [word_tokenize(c.lower()) for c in data]
     fre = []
     # h_en = Hyphenator('en_US')  # Tried PyHyphen
@@ -233,12 +239,27 @@ def flesch_reading_score(data):
         FRE = 206.835 - (1.015 * (twords / tsents)) - (84.6 * (tsyllb / twords))
         fre.append(FRE)
     fre = pd.DataFrame(fre)
-    fre = fre[0].describe().to_dict()
+    fre_stats = fre[0].describe().to_dict()
 
-    for i in fre:
+    for i in fre_stats:
         with open(desc_stats_csv, 'a') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            csv_writer.writerow([resource_id, 'FRE_'+i, fre[i]])
+            csv_writer.writerow([resource_id, 'FRE_'+i, fre_stats[i]])
+
+
+def output_dataframe(data):
+    """ Output and save the DataFrame as CSV. Useful to see distribution of each row's value """
+    global lens, num_words, num_sents, ttr, fre
+
+    comments = data
+    final_pd = pd.DataFrame(comments)
+    final_pd['num_char'] = lens
+    final_pd['num_word'] = num_words
+    final_pd['num_sent'] = num_sents
+    final_pd['TTR'] = ttr
+    final_pd['FRE'] = fre
+
+    final_pd.to_csv('desc-stats-' + resource_id, encoding='utf-8')
 
 
 def main(input_data):
@@ -249,6 +270,7 @@ def main(input_data):
     desc_stats(comments_data)
     ttr(comments_data)
     flesch_reading_score(comments_data)
+    output_dataframe(comments_data)
 
     print("Done: " + input_data)
 

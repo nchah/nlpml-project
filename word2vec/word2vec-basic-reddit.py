@@ -64,9 +64,9 @@ data = '\n'.join(" ".join(comm) for comm in lemmas)
 
 # Stopwords and punctuation
 punctuation.remove("'")
-for p in punctuation:
-    data = data.replace(p, '')
-    print('replaced: ' + p)
+# for p in punctuation:
+#     data = data.replace(p, '')
+#     print('replaced: ' + p)
 
 words = tf.compat.as_str(data).split()
 
@@ -244,6 +244,7 @@ def plot_with_labels(low_dim_embs, labels, filename='tsne.png'):
         # ignore_tags = ['DT', 'PRP', 'VB', 'RB', 'IN', 'JJ']
         # if label.lower() not in stopwords and pos[0][1] not in ignore_tags and pos[0][1] == 'NN':
         if label.lower() not in stopwords \
+        and label not in punctuation \
         and label[0].isupper() \
         or label.lower() in emolex_positive or label.lower() in emolex_negative:
             x, y = low_dim_embs[i, :]

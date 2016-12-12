@@ -48,13 +48,16 @@ def merge_data(rd_data, yt_data):
     print "- Sample of RD:", x_rd[:5]
     print "- Sample of YT:", x_yt[:5]
 
+    min_val = min([len(x_rd) ,len(x_yt)])
+    # print min_val
+
     # Merging all the data into one list of lists. Item orders are maintained.
     all_x = []
-    [[all_x.append(i) for i in l] for l in [x_rd, x_yt]]
+    [[all_x.append(i) for i in l] for l in [x_rd[:min_val], x_yt[:min_val]]]
     all_y = []
-    [[all_y.append(i) for i in l] for l in [y_rd, y_yt]]
+    [[all_y.append(i) for i in l] for l in [y_rd[:min_val], y_yt[:min_val]]]
     if len(all_x) == len(all_y):
-        print "Merge completed:", len(all_x)
+        print "- Merge completed:", len(all_x), "total, with each corpus:", min_val
     # all_x = [all_x, all_y]
     # z, all_y = np.unique(all_y, return_inverse=True)
 
@@ -65,21 +68,21 @@ def svm():
 
     tfidf = TfidfVectorizer(stop_words='english')
     # tfidf = TfidfVectorizer(stop_words='english', ngram_range=(1,2), max_df=0.7, min_df=10, max_features=100)
-    print tfidf  # For logging the settings on command line output
+    print "- " + str(tfidf)  # For logging the settings on command line output
     X = tfidf.fit_transform(all_x)
 
     # Setting training and testing datasets
     x_train, x_test, y_train, y_test = train_test_split(X, all_y, test_size=0.3, random_state=0)
-    print "x train:", x_train.shape, '\n', \
-          "x test:", x_test.shape, '\n', \
-          "y train:", len(y_train), '\n', \
-          "y test:", len(y_test)
+    print "- x train:", x_train.shape, '\n', \
+          "- x test:", x_test.shape, '\n', \
+          "- y train:", len(y_train), '\n', \
+          "- y test:", len(y_test)
     # print y_train  # Verified that distribution of labels was randomized
 
     # Set the SVC type to use: LinearSVC or SVC
     classifier1 = LinearSVC()
     # classifier1 = SVC(C=1, kernel='rbf')
-    print classifier1  # For logging the settings on command line output
+    print "- " + str(classifier1)  # For logging the settings on command line output
     classifier1.fit(x_train, y_train)
 
     yhat = classifier1.predict(x_test)
@@ -97,7 +100,7 @@ def svm():
     print mc
 
 
-def show_top10(classifier, vectorizer, categories):
+def show_top_features(classifier, vectorizer, categories):
     """ Get top 10 
     Note: for LinearSVC(), as per http://scikit-learn.org/stable/modules/svm.html
     'LinearSVC implements "one-vs-the-rest" multi-class strategy, thus training n_class models. 
@@ -106,7 +109,7 @@ def show_top10(classifier, vectorizer, categories):
     # for i, category in enumerate(categories):
     for category in categories:
         # print classifier.coef_
-        top10 = np.argsort(classifier.coef_[0])[-10:]
+        top10 = np.argsort(classifier.coef_[0])[-20:]
         print("%s: %s" % (category, " ".join(feature_names[top10])))
 
 
@@ -129,8 +132,8 @@ def main(input_data_RD, input_data_YT):
     svm()
 
     cats = ['RD']
-    show_top10(classifier1, tfidf, cats)
-    most_informative_feature_for_class_svm(tfidf, classifier1, 10)
+    show_top_features(classifier1, tfidf, cats)
+    most_informative_feature_for_class_svm(tfidf, classifier1, 20)
 
 
 if __name__ == '__main__':

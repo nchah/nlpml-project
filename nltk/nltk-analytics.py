@@ -213,6 +213,23 @@ def ttr(data):
             csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             csv_writer.writerow([resource_id, 'TTR_'+i, ttr_stats[i]])
 
+    # TTR stats calcualated for chunks of 100
+    ttr_list = []
+    temp = []
+    for i in xrange(0, len(data), 100):
+        chunk = data[i:i+100]
+        types = len(set(chunk))
+        tokens = len(chunk)
+        ttr = types / tokens
+        temp.append(ttr)
+    print len(temp)
+    ttr_list.append(float(np.mean(temp)))
+
+    for i in ttr_list:
+        with open(desc_stats_csv, 'a') as csv_file:
+            csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            csv_writer.writerow([resource_id, 'TTR_p100_', i])
+
 
 def flesch_reading_score(data):
     """ Flesch Reading Ease Score """

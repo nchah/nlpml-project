@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 
+# from __future__ import print_function
+from __future__ import division
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 from sklearn.feature_extraction import text
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.metrics import silhouette_samples, silhouette_score
 from sklearn.pipeline import Pipeline
-# from __future__ import print_function
 import argparse
 import csv
 import matplotlib
@@ -201,7 +202,7 @@ def main(input_data):
     data2 = process_pca(data)
     plot_scores_and_clusters_from_pca(data2, data)
 
-    plot_scores_and_clusters_from_kmeans(data)
+    # plot_scores_and_clusters_from_kmeans(data)
 
     return ''
 

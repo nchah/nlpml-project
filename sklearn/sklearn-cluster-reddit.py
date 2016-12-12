@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 
+# from __future__ import print_function
+from __future__ import division
 from sklearn.cluster import KMeans
-from sklearn.decomposition import PCA
+from sklearn.decomposition import PCA, LatentDirichletAllocation
 from sklearn.feature_extraction import text
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.metrics import silhouette_samples, silhouette_score
 from sklearn.pipeline import Pipeline
-# from __future__ import print_function
 import argparse
 import csv
 import matplotlib
@@ -80,7 +81,7 @@ def plot_scores_and_clusters_from_kmeans(corpus):
 
 def process_pca(corpus):
     """ Implementing PCA """
-    tfidf = TfidfVectorizer(stop_words='english', ngram_range=(1,2), max_df=0.7, min_df=10, max_features=50)
+    tfidf = TfidfVectorizer(stop_words='english', ngram_range=(1,2), max_df=0.7, min_df=10, max_features=100)
     x = tfidf.fit_transform(corpus)
     pca = PCA(n_components=2)
     X = x.toarray()
@@ -181,6 +182,25 @@ def plot_scores_and_clusters_from_pca(X, corpus):
         plt.savefig('rd-pca-clusters-' + str((n_clusters)) + '.png', dpi=600)
 
 
+def process_lda(corpus):
+    """ """
+    tdm = CountVectorizer(stop_words=stopwords)
+    x = tdm.fit_transform(corpus)
+
+    lda = LatentDirichletAllocation(n_topics=3, random_state=0)
+    lda.fit(x)
+
+    n = 10
+    beta = (lda.components_.T/lda.components_.sum(axis=1)).T
+    for topic_id, topic in enumerate(beta):
+        print "Topic %d:" % (topic_id+1)
+        for i in topic.argsort()[:-n-1:-1]:
+            print "%-20s%-0.3f" %(feature_names[i],beta[topic_id,i])
+
+    feature_names = tdm.get_feature_names()
+
+
+
 def load_dataframe(filepath):
     """ Load CSV data as a pandas DataFrame
     And apply data pre-processing and cleaning """
@@ -197,7 +217,9 @@ def main(input_data):
     data2 = process_pca(data)
     plot_scores_and_clusters_from_pca(data2, data)
 
-    plot_scores_and_clusters_from_kmeans(data)
+    # plot_scores_and_clusters_from_kmeans(data)
+
+    # process_lda(data)
 
     return ''
 

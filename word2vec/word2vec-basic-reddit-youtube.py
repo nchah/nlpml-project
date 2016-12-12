@@ -41,8 +41,22 @@ stopwords = nltk.corpus.stopwords.words('english')
 punctuation = set(string.punctuation)
 
 # Step 1: Load the data.
+
+# Reddit
+# comments = pd.read_csv('reddit/data/output/2016-12-04-21h-11m-reddit-comments-54nrcs.csv', encoding='utf-8')
+# comments = pd.read_csv('reddit/data/output/2016-12-04-21h-11m-reddit-comments-56psaa.csv', encoding='utf-8')
+# comments = pd.read_csv('reddit/data/output/2016-12-04-21h-11m-reddit-comments-58eh18.csv', encoding='utf-8')
 comments = pd.read_csv('reddit/data/output/2016-12-04-21h-11m-reddit-comments.csv', encoding='utf-8')
 comments = comments['comment'].tolist()
+
+# Youtube
+# comments = pd.read_csv('youtube/data/output/2016-12-04-19h-43m-youtube-comments-855Am6ovK7s.csv', encoding='utf-8')
+# comments = pd.read_csv('youtube/data/output/2016-12-04-19h-43m-youtube-comments-FRlI2SQ0Ueg.csv', encoding='utf-8')
+# comments = pd.read_csv('youtube/data/output/2016-12-04-19h-43m-youtube-comments-smkyorC5qwc.csv', encoding='utf-8')
+# comments = pd.read_csv('youtube/data/output/2016-12-04-19h-43m-youtube-comments.csv', encoding='utf-8')
+# comments = comments['top_level_comment'].tolist()
+# comments = [unicode(c).replace(u'\xef\xbb\xbf', u'') for c in comments if c != ' - ']
+# comments = [c.replace(u'\ufeff', u'') for c in comments]
 
 # Stemming 
 # stemmer = LancasterStemmer()

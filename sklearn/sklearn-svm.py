@@ -31,7 +31,7 @@ def load_dataframe_YT(filepath):
 def load_dataframe_RD(filepath):
     """ Load CSV data as a pandas DataFrame
     And apply data pre-processing and cleaning """
-    data = pd.read_csv(filepath)
+    data = pd.read_csv(filepath, encoding='utf-8')
     comments = data['comment'].tolist()
     return comments
 
@@ -39,7 +39,7 @@ def load_dataframe_RD(filepath):
 def merge_data(rd_data, yt_data):
     """ Merge the X, Y datasets """
     # Defining globals for wider access
-    global all_x, all_y
+    global x_rd, x_yt, all_x, all_y
 
     x_rd = rd_data
     y_rd = ['RD' for i in range(len(rd_data))]
@@ -109,17 +109,30 @@ def show_top_features(classifier, vectorizer, categories):
     # for i, category in enumerate(categories):
     for category in categories:
         # print classifier.coef_
-        top10 = np.argsort(classifier.coef_[0])[-20:]
+        top10 = np.argsort(classifier.coef_[0])[-30:]
         print("%s: %s" % (category, " ".join(feature_names[top10])))
 
 
-def most_informative_feature_for_class_svm(vectorizer, classifier, n): #  classlabel, n=10):
+def most_informative_feature_for_class_svm(vectorizer, classifier, n):
+    """ """
+    global x_rd, x_yt
     labelid = 0 # this is the coef we're interested in. 
     feature_names = vectorizer.get_feature_names()
     svm_coef = np.asarray(classifier.coef_)#.toarray() 
     topn = sorted(zip(svm_coef[labelid], feature_names))[-n:]
+    print '%-15s%-12s%-12s%-12s' % ("Feature", "Coef", "RD counts", "YT counts")
+    rd_count = 0
+    yt_count = 0
     for coef, feat in topn:
-        print feat, coef
+        for comm in x_rd:
+            if feat in comm.lower():
+                rd_count += 1
+        for comm in x_yt:
+            if feat in comm.lower():
+                yt_count += 1
+        print '%-15s%-12f%-12d%-12d' % (feat, coef, rd_count, yt_count)
+        # print feat, '\t', coef, '\t', rd_count, '\t', yt_count
+        rd_count, yt_count = 0, 0
 
 
 def main(input_data_RD, input_data_YT):
@@ -131,9 +144,9 @@ def main(input_data_RD, input_data_YT):
     merge_data(rd, yt)
     svm()
 
-    cats = ['RD']
-    show_top_features(classifier1, tfidf, cats)
-    most_informative_feature_for_class_svm(tfidf, classifier1, 20)
+    # cats = ['YT']
+    # show_top_features(classifier1, tfidf, cats)
+    most_informative_feature_for_class_svm(tfidf, classifier1, 30)
 
 
 if __name__ == '__main__':

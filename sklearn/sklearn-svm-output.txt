@@ -148,3 +148,250 @@ hilary 1.63237875212
 usa 1.63901091522
 americans 1.65987507003
 win 1.75313427269
+
+
+= = = = = Further output after equalizing lengths
+
+nc@nchah:nlpml-project$ python sklearn/sklearn-svm.py reddit/data/output/2016-12-04-21h-11m-reddit-comments-54nrcs.csv youtube/data/output/2016-12-04-19h-43m-youtube-comments-855Am6ovK7s.csv
+- Sample of RD: [u'Check out the fresh megathread [here](https://www.reddit.com/r/politics/comments/54or5a/2016_presidential_race_first_presidential/).', u"Remember when Trump admitted that he hasn't paid any taxes at all? Lol.", u"and then claimed it's good business\r\n\r\ni'm amazed he has any support since most of his support is poor and middle class white men, the exact people who get screwed when the rich don't pay taxes", u"It's because he's smart.  And wanting the real estate market to dive in 2006 was just good business.\r\n\r\nOh, and 'Bigly.'", u'https://twitter.com/jerryspringer/status/780601736327208960\r\n\r\nlol']
+- Sample of YT: [u"I'm sick and tired of those who say Hillary has no great accomplishments. I \nwould say staying out of prison for the crimes she committed in the last \nfour decades is a great accomplishment.", u'This is almost terrifying to watch! how can any of these two rule a \ncountry! #Nobodyforpresident', u"Who's watching this after the election.", u'Yelling over your opponent is not how you win a debate, Donnie.', u"LOOOL Trump. Your temperament is terrible.You're a tyrant. Take several \nseats. and OML if Hilary smiles one more time, I swear I'm gonna jump off \nthis roof."]
+- Merge completed: 1946 total, with each corpus: 973
+- TfidfVectorizer(analyzer=u'word', binary=False, decode_error=u'strict',
+        dtype=<type 'numpy.int64'>, encoding=u'utf-8', input=u'content',
+        lowercase=True, max_df=1.0, max_features=None, min_df=1,
+        ngram_range=(1, 1), norm=u'l2', preprocessor=None, smooth_idf=True,
+        stop_words='english', strip_accents=None, sublinear_tf=False,
+        token_pattern=u'(?u)\\b\\w\\w+\\b', tokenizer=None, use_idf=True,
+        vocabulary=None)
+- x train: (1362, 4770) 
+- x test: (584, 4770) 
+- y train: 1362 
+- y test: 584
+- LinearSVC(C=1.0, class_weight=None, dual=True, fit_intercept=True,
+     intercept_scaling=1, loss='squared_hinge', max_iter=1000,
+     multi_class='ovr', penalty='l2', random_state=None, tol=0.0001,
+     verbose=0)
+The percent correctly predicted is 89.55%.
+The F1 score is 0.896.
+             precision    recall  f1-score   support
+
+         RD       0.92      0.87      0.90       300
+         YT       0.87      0.92      0.90       284
+
+avg / total       0.90      0.90      0.90       584
+
+Feature        Coef        RD counts   YT counts   
+female         0.749191    0           4           
+american       0.753589    15          64          
+live           0.761633    10          42          
+equal          0.778253    5           6           
+olds           0.779800    1           5           
+citizen        0.780368    0           3           
+sounds         0.785927    2           9           
+seen           0.791663    7           6           
+humanity       0.796225    1           2           
+nuclear        0.798799    6           14          
+nooooooooo     0.813160    0           1           
+watching       0.828432    12          24          
+hilary         0.829762    11          43          
+anymore        0.834905    0           9           
+talk           0.838816    37          38          
+shut           0.841279    2           11          
+care           0.885307    5           28          
+win            0.885929    40          61          
+22             0.904466    0           6           
+bitch          0.919732    0           14          
+americans      0.927164    5           28          
+comedy         0.937344    0           7           
+make           0.947385    36          83          
+presidential   0.956900    8           25          
+lies           0.975465    3           22          
+dumb           0.988083    4           15          
+turn           1.044626    9           25          
+america        1.230183    27          138         
+president      1.241276    30          159         
+country        1.299789    9           66 
+
+
+nc@nchah:nlpml-project$ python sklearn/sklearn-svm.py reddit/data/output/2016-12-04-21h-11m-reddit-comments-56psaa.csv youtube/data/output/2016-12-04-19h-43m-youtube-comments-FRlI2SQ0Ueg.csv 
+- Sample of RD: [u'[Returning to the routine after the debate.](http://i.imgur.com/k5XrRZt.jpg)', u'I thought I was hallucinating when they did that close zoom in on Hillary\'s face. "Am I watching SNL by accident?"', u"They're so totally doing that next week.\n\nAnd the fly.", u'I hope they can get Jeff Goldblum to reprise the role.', u'I thought the fly was in our house']
+- Sample of YT: [u"Let's play Russian roulette \n\n\n\n\n\n\nevery 2th like dies", u'Stop asking him about the stupid bus', u"I can't stand that wicked fake smiling bitch Hillary Clinton.", u'Well well well, that smirk that was on her face thru this debate was \nremoved by the American people. She has been knocked off her throne, never \nto regain her seat again! Way to go America! Way to go.....', u"lol who's just only tuning in to the debates now Trump has won. certainly \nme!\U0001f605\U0001f648"]
+- Merge completed: 2182 total, with each corpus: 1091
+- TfidfVectorizer(analyzer=u'word', binary=False, decode_error=u'strict',
+        dtype=<type 'numpy.int64'>, encoding=u'utf-8', input=u'content',
+        lowercase=True, max_df=1.0, max_features=None, min_df=1,
+        ngram_range=(1, 1), norm=u'l2', preprocessor=None, smooth_idf=True,
+        stop_words='english', strip_accents=None, sublinear_tf=False,
+        token_pattern=u'(?u)\\b\\w\\w+\\b', tokenizer=None, use_idf=True,
+        vocabulary=None)
+- x train: (1527, 5156) 
+- x test: (655, 5156) 
+- y train: 1527 
+- y test: 655
+- LinearSVC(C=1.0, class_weight=None, dual=True, fit_intercept=True,
+     intercept_scaling=1, loss='squared_hinge', max_iter=1000,
+     multi_class='ovr', penalty='l2', random_state=None, tol=0.0001,
+     verbose=0)
+The percent correctly predicted is 89.16%.
+The F1 score is 0.892.
+             precision    recall  f1-score   support
+
+         RD       0.89      0.91      0.90       344
+         YT       0.90      0.87      0.88       311
+
+avg / total       0.89      0.89      0.89       655
+
+Feature        Coef        RD counts   YT counts   
+joke           0.795400    1           11          
+country        0.795873    33          60          
+win            0.808612    24          82          
+gay            0.812419    0           2           
+clown          0.824706    0           6           
+good           0.825497    47          60          
+asking         0.839186    6           5           
+okay           0.839341    1           4           
+biased         0.857005    0           14          
+watching       0.858043    4           20          
+rapist         0.876547    0           4           
+wins           0.908326    1           22          
+women          0.912331    20          41          
+usa            0.918514    0           30          
+donald         0.946002    33          138         
+racist         0.952446    0           34          
+funny          0.968899    6           12          
+lol            0.974909    9           36          
+24             1.002863    3           19          
+20             1.060003    27          55          
+trump          1.066945    234         411         
+ll             1.142223    461         553         
+vote           1.199323    33          105         
+americans      1.259227    1           36          
+care           1.345005    11          34          
+snl            1.357980    2           7           
+hilary         1.588438    3           40          
+war            1.593920    35          42          
+hillary        1.714473    71          255         
+america        1.756367    34          154 
+
+
+nc@nchah:nlpml-project$ python sklearn/sklearn-svm.py reddit/data/output/2016-12-04-21h-11m-reddit-comments-58eh18.csv youtube/data/output/2016-12-04-19h-43m-youtube-comments-smkyorC5qwc.csv 
+- Sample of RD: [u"So it turns out that Obama's weird brother served no purpose at all. That's interesting.", u"Somehow Clinton found the strength not to be distracted by a man she's never met. ", u"It seems Trump forgot that he's not actually running against Obama.", u"Has he remembered that he's not running against Bill Clinton yet?", u"Chris Wallace: *I know you didn't agree to closing statements, but fuck you both you're doing one.*\n\n"]
+- Sample of YT: [u"I'm Irish and I don't care\U0001f602\U0001f1e8\U0001f1ee\U0001f595\U0001f3fb", u'Trump and Clinton are merely two different symptoms of the same fatal \ndisease', u'Both Trump and Clinton are unworthy. KICK THEM BOTH OUT!', u'Trump Supporters: I implore you when you vote, triple check your selection. \nIf the machine\'s a "Smartmatic", then it\'s a potentially rigged machine \nowned by George Soros. Demand a Paper Ballot.\n\nhttp://thetruthdivision.com/2016/10/alert-see-smartmatic-voting-booth-polls-heres-must/\n', u"God it's funny to hear Hillary talk about the Supreme Court since she \nwithheld tons of information from them and was completely uncooperative."]
+- Merge completed: 1922 total, with each corpus: 961
+- TfidfVectorizer(analyzer=u'word', binary=False, decode_error=u'strict',
+        dtype=<type 'numpy.int64'>, encoding=u'utf-8', input=u'content',
+        lowercase=True, max_df=1.0, max_features=None, min_df=1,
+        ngram_range=(1, 1), norm=u'l2', preprocessor=None, smooth_idf=True,
+        stop_words='english', strip_accents=None, sublinear_tf=False,
+        token_pattern=u'(?u)\\b\\w\\w+\\b', tokenizer=None, use_idf=True,
+        vocabulary=None)
+- x train: (1345, 4946) 
+- x test: (577, 4946) 
+- y train: 1345 
+- y test: 577
+- LinearSVC(C=1.0, class_weight=None, dual=True, fit_intercept=True,
+     intercept_scaling=1, loss='squared_hinge', max_iter=1000,
+     multi_class='ovr', penalty='l2', random_state=None, tol=0.0001,
+     verbose=0)
+The percent correctly predicted is 86.83%.
+The F1 score is 0.868.
+             precision    recall  f1-score   support
+
+         RD       0.86      0.88      0.87       292
+         YT       0.87      0.86      0.87       285
+
+avg / total       0.87      0.87      0.87       577
+
+Feature        Coef        RD counts   YT counts   
+reality        0.820271    4           6           
+45k            0.823424    0           1           
+arabic         0.829063    0           3           
+racist         0.833867    1           39          
+wants          0.834841    9           31          
+usa            0.836796    6           32          
+don            0.843260    107         198         
+president      0.851438    59          128         
+hack           0.863154    0           6           
+volley         0.873797    0           1           
+smile          0.886602    1           16          
+loves          0.900418    0           7           
+choose         0.906146    0           11          
+bernie         0.908526    6           10          
+lol            0.910513    6           36          
+dont           0.913157    1           15          
+know           0.930125    42          69          
+american       0.944622    22          81          
+glad           0.962687    10          17          
+make           0.991693    36          69          
+pick           1.003613    7           9           
+idiot          1.007801    8           26          
+win            1.091768    39          82          
+balance        1.106021    2           5           
+trump          1.135853    245         457         
+hillary        1.173504    93          246         
+country        1.194377    18          72          
+hilary         1.230193    5           36          
+nbc            1.308039    1           22          
+doomed         1.484808    0           5 
+
+
+nc@nchah:nlpml-project$ python sklearn/sklearn-svm.py reddit/data/output/2016-12-04-21h-11m-reddit-comments.csv youtube/data/output/2016-12-04-19h-43m-youtube-comments.csv
+- Sample of RD: [u'Check out the fresh megathread [here](https://www.reddit.com/r/politics/comments/54or5a/2016_presidential_race_first_presidential/).', u"Remember when Trump admitted that he hasn't paid any taxes at all? Lol.", u"and then claimed it's good business\n\ni'm amazed he has any support since most of his support is poor and middle class white men, the exact people who get screwed when the rich don't pay taxes", u"It's because he's smart.  And wanting the real estate market to dive in 2006 was just good business.\n\nOh, and 'Bigly.'", u'https://twitter.com/jerryspringer/status/780601736327208960\n\nlol']
+- Sample of YT: [u"I'm sick and tired of those who say Hillary has no great accomplishments. I \nwould say staying out of prison for the crimes she committed in the last \nfour decades is a great accomplishment.", u'This is almost terrifying to watch! how can any of these two rule a \ncountry! #Nobodyforpresident', u"Who's watching this after the election.", u'Yelling over your opponent is not how you win a debate, Donnie.', u"LOOOL Trump. Your temperament is terrible.You're a tyrant. Take several \nseats. and OML if Hilary smiles one more time, I swear I'm gonna jump off \nthis roof."]
+- Merge completed: 6050 total, with each corpus: 3025
+- TfidfVectorizer(analyzer=u'word', binary=False, decode_error=u'strict',
+        dtype=<type 'numpy.int64'>, encoding=u'utf-8', input=u'content',
+        lowercase=True, max_df=1.0, max_features=None, min_df=1,
+        ngram_range=(1, 1), norm=u'l2', preprocessor=None, smooth_idf=True,
+        stop_words='english', strip_accents=None, sublinear_tf=False,
+        token_pattern=u'(?u)\\b\\w\\w+\\b', tokenizer=None, use_idf=True,
+        vocabulary=None)
+- x train: (4235, 9345) 
+- x test: (1815, 9345) 
+- y train: 4235 
+- y test: 1815
+- LinearSVC(C=1.0, class_weight=None, dual=True, fit_intercept=True,
+     intercept_scaling=1, loss='squared_hinge', max_iter=1000,
+     multi_class='ovr', penalty='l2', random_state=None, tol=0.0001,
+     verbose=0)
+The percent correctly predicted is 88.32%.
+The F1 score is 0.883.
+             precision    recall  f1-score   support
+
+         RD       0.87      0.90      0.89       921
+         YT       0.90      0.86      0.88       894
+
+avg / total       0.88      0.88      0.88      1815
+
+Feature        Coef        RD counts   YT counts   
+seen           1.067686    28          34          
+racist         1.076559    20          107         
+russia         1.088787    21          88          
+america        1.089314    115         432         
+husband        1.103085    1           22          
+equal          1.115148    12          16          
+bush           1.117630    4           16          
+world          1.120276    46          166         
+wins           1.120892    10          65          
+care           1.127781    43          94          
+screwed        1.134258    2           20          
+biased         1.151161    7           23          
+bitch          1.169858    17          54          
+dont           1.177797    7           40          
+channel        1.188362    0           17          
+nbc            1.208561    7           38          
+funny          1.222443    19          36          
+im             1.230165    727         580         
+reply          1.306251    5           7           
+kids           1.327833    0           17          
+hillary        1.345922    281         718         
+president      1.361457    153         403         
+politician     1.363644    13          45          
+usa            1.384840    18          92          
+trump          1.394947    728         1283        
+choose         1.402380    6           30          
+country        1.413664    60          198         
+win            1.522089    103         225         
+americans      1.763275    15          97          
+hilary         1.887991    19          119 
+

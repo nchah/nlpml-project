@@ -1,6 +1,6 @@
 # nlpml-project
 
-A natural language processing and machine learning project done in part for a University of Toronto graduate course, POL2578: Computational Text Analysis.
+A Natural Language Processing and Machine Learning project done in part for a University of Toronto graduate course, POL2578: Computational Text Analysis.
 
 # Dependencies
 
@@ -45,6 +45,10 @@ Script | Use Case
 `sklearn/sklearn-svm.py` | (Supervised ML) Implements a Support Vector Machine to distinguish comments.
 `word2vec/word2vec-basic-*.py` | TensorFlow word2vec implementation with modifications for this project.
 `youtube/youtube-data-api.py` | (Unsupervised ML) Gets YouTube data using the YouTube Data API.
+
+# Findings
+
+
 
 
 

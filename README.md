@@ -40,10 +40,10 @@ Script | Use Case
 `nltk/nltk-analytics.py` | Gets various analytics measures on the text data.
 `nltk/nltk-scripts.sh` | Bash script to run a set of the nltk-analytics commands.
 `reddit/reddit-api.py` | Gets Reddit data using the Reddit API (with the PRAW library).
-`sklearn/sklearn-cluster-*.py` | (Unsupervised ML) Implements various clustering and visualization operations.
-`sklearn/sklearn-lda-*.py` | (Unsupervised ML) Latent Dirichlet Allocation
-`sklearn/sklearn-svm.py` | (Supervised ML) Implements a Support Vector Machine to distinguish comments.
-`word2vec/word2vec-basic-*.py` | TensorFlow word2vec implementation with modifications for this project.
+`sklearn/sklearn-cluster-*.py` | (Unsupervised ML) Implements various clustering and visualization operations. Implements Principal Components Analysis (PCA).
+`sklearn/sklearn-lda-*.py` | (Unsupervised ML) Latent Dirichlet Allocation. WIP and not implemented for the project.
+`sklearn/sklearn-svm.py` | (Supervised ML) Implements a Support Vector Machine to distinguish the origin of comments. Treats comment origin (Reddit or YouTube) as the label.
+`word2vec/word2vec-basic-*.py` | (Unsupvervised ML) TensorFlow word2vec implementation with modifications for this project.
 `youtube/youtube-data-api.py` | (Unsupervised ML) Gets YouTube data using the YouTube Data API.
 
 # Findings
@@ -58,7 +58,4 @@ I found the following awesome-* GitHub READMEs to be useful in the early explora
 
 - [caesar0301/awesome-public-datasets](https://github.com/caesar0301/awesome-public-datasets)
 - [keonkim/awesome-nlp](https://github.com/keonkim/awesome-nlp)
-
-
-
 
